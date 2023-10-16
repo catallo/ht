@@ -25,6 +25,6 @@ ht is is written in Dart. This means it's a single binary that you can easily ad
 
 ##### Downloads
 
-- [Linux x64](download-link-for-Linux-x64)
+- [Linux x64](download-link-for-Linux-x64) works on every x64 Linux distro
 - [Raspberry Pi 32-Bit](download-link-for-Raspberry-Pi-32-Bit)
 - [Raspberry Pi 64-Bit](download-link-for-Raspberry-Pi-64-Bit)
