@@ -19,9 +19,9 @@
 
 I initially created ht as a simple experiment to test GPT-3.5-Turbo's usefulness with shell commands. However, I find myself using it extensively in my daily tasks. So I'm sharing it with the hope that it can benefit others in the same way.
 
-To use ht, you'll need an OpenAI API key. The good news is that due to its low token usage, it's an incredibly budget-friendly tool. 
-
 ht is written in Dart. This means it's one single binary that you can easily add to your system's PATH. No messing around with Python virtual environments or other complexities. 
+
+To use ht, you'll need an OpenAI API key. The good news is that due to ht's low token usage, a typical request costs about $0.00025, making it an incredibly budget-friendly tool for daily usage. You can [sign up for an API key here](https://platform.openai.com/signup) or refer to [this article](https://www.howtogeek.com/885918/how-to-get-an-openai-api-key) for detailed instructions.
 
 ##### Downloads
 
