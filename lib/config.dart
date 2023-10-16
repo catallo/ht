@@ -1,13 +1,11 @@
 import 'dart:io';
 
-// Class to store configuration settings in
-// a text file. The file is located at ~/.config/ht/config.
-// The format is one setting per line:
+// configuration settings at ~/.config/ht/config.
+// one setting per line:
 // API-KEY: 1234567890
 // debug: true
 
 class Config {
-  // constructor
   Config({this.apiKey, this.debug});
 
   String? apiKey;
@@ -16,7 +14,6 @@ class Config {
 
   // check if config dir and file exists and create if not
   bool checkConfig() {
-    // check if directory exists
     if (!Directory('$home/.config/ht').existsSync()) {
       try {
         //print("creating config directory");
@@ -61,7 +58,6 @@ class Config {
   bool setApiKey(String apiKey) {
     // check if API key is in file
     var file = File('$home/.config/ht/config').readAsStringSync();
-    // find line with API-KEY, replace it
     var regex = RegExp(r'API-KEY:.*');
     if (regex.hasMatch(file)) {
       try {
