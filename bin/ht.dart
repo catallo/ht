@@ -1,4 +1,4 @@
-// ht (for 'how-to') - an assistant that answers your questions about shell commands.
+// ht (for 'how-to') - a shell command that answers your questions about shell commands.
 //
 // MIT License
 //
@@ -174,7 +174,7 @@ String filterResponse(String text) {
   text = text.replaceAll("So, ", "$acItalic\nSo, ");
   text = text.replaceAll("Note: ", "$acItalic\nNote: ");
   text = text.replaceAll("Remember, ", "$acItalic\nRemember, ");
-  text = text.replaceAll("Overall, ", "$acItalic\nRemember, ");
+  text = text.replaceAll("Overall, ", "$acItalic\nOverall, ");
 
   dbg("filtered text: $text");
   return text;
@@ -274,14 +274,15 @@ main(List<String> arguments) async {
 
   if (apiKey == null) {
     print(
-        "To use this application, you need to set an API key. You can obtain an API key by signing up at https://platform.openai.com/signup.");
+        "To use this application, you need to set an API key. The good news is that due to ht's");
+        
+    print("low token usage, a typical request costs about $0.00025, making it a budget-friendly\ntool for daily usage.");
+        
+    print("You can obtain an API key by signing up at https://platform.openai.com/signup.");
     print(
-        "For a more detailed guide on how to get an OpenAI API key, you can refer to this article: https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/.");
-    print(
-        "Please note that using OpenAI's API with ht is rather budget-friendly. OpenAI provides \$5 for free to get you started,");
-    print(
-        "and each request typically consumes only a few tokens. For example, with \$1, you can make approximately 500 requests.");
-    stdout.write("\nEnter your API key (or press enter to exit): ");
+        "For a more detailed guide on how to get an OpenAI API key, you can refer to this\narticle:\nhttps://www.howtogeek.com/885918/how-to-get-an-openai-api-key/.");
+
+    stdout.write("\n${acBold}Enter your API key (or press enter to exit): ");
 
     apiKey = stdin.readLineSync();
 
@@ -302,7 +303,7 @@ main(List<String> arguments) async {
       (arguments[0] == '-h') ||
       (arguments[0] == '--help')) {
     print(
-        "\n$acItalic${acBold}ht (for how-to)$acReset,$acItalic an assistant that answers your questions about shell commands.");
+        "\n$acItalic${acBold}ht (for how-to)$acReset,$acItalic a shell command that answers your questions about shell commands.");
     print(
         "$acReset$acGrey                                                 https://github.com/catallo/ht$acReset");
     print("$acItalic  Usage$acReset:");
