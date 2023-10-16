@@ -1,5 +1,5 @@
 name: ht
-description: an assistant that answers your questions about shell commands.
+description: a shell command that answers your questions about shell commands.
 version: 1.0.0
 # homepage: https://github.com/catallo/ht/
 environment:
