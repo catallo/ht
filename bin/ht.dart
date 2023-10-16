@@ -326,12 +326,15 @@ main(List<String> arguments) async {
 
   // if arguments is -s or --settings, print settings
   if ((arguments[0] == '-s') || (arguments[0] == '--settings')) {
-    print("\n  model:  $model");
-    print("apikey: $apiKey");
+    print("\nmodel:  $model");
+    //print("apikey: $apiKey");
+    // like above but show only the last 6 characters of the api key
+    print("apikey: ..${apiKey!.substring(apiKey!.length - 6)}");
+
     print("debug:  $debug");
     print(
-        "\n$acItalic  Use 'ht -set <setting> <value>' to change setting (or edit ~/.config/ht/config).");
-    print("example: ht -set apikey 123456");
+        "\n${acItalic}Use 'ht -set <setting> <value>' to change setting (or edit ~/.config/ht/config).");
+    print("example: ht -set apikey 123456\n");
     exit(0);
   }
 

@@ -1,4 +1,4 @@
-### ht - an assistant that answers your questions about shell commands.
+### ht - a shell command that answers your questions about shell commands.
 
 ##### Usage
 
@@ -21,7 +21,7 @@ I initially created ht as a simple experiment to test GPT-3.5-Turbo's usefulness
 
 To use ht, you'll need an OpenAI API key. The good news is that due to its low token usage, it's an incredibly budget-friendly tool. 
 
-ht is written in Dart. This means it's one single binary that you can easily add to your system's PATH. You won't have to deal with Python virtual environments or other complexities. 
+ht is written in Dart. This means it's one single binary that you can easily add to your system's PATH. No messing around with Python virtual environments or other complexities. 
 
 ##### Downloads
 
