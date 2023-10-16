@@ -10,7 +10,7 @@
 
 ##### Examples
 
-- `ht find all IPv4 addresses in file and write to new file`
+- `ht find all IPv4 addresses in file A and write to file B`
 - `ht explain`
 - `ht explain ls -lS`
 - `ht explain "ps -aux | grep nvidia"`
@@ -21,10 +21,10 @@ I initially created ht as a simple experiment to test GPT-3.5-Turbo's usefulness
 
 To use ht, you'll need an OpenAI API key. The good news is that due to its low token usage, it's an incredibly budget-friendly tool. 
 
-ht is is written in Dart. This means it's a single binary that you can easily add to your system's PATH. You won't have to deal with Python virtual environments or other complexities. 
+ht is written in Dart. This means it's one single binary that you can easily add to your system's PATH. You won't have to deal with Python virtual environments or other complexities. 
 
 ##### Downloads
 
-- [Linux x64](download-link-for-Linux-x64) (works on every x64 Linux distro)
+- [Linux x64](download-link-for-Linux-x64) (works on every 64-Bit Linux distro)
 - [Raspberry Pi 32-Bit](download-link-for-Raspberry-Pi-32-Bit)
 - [Raspberry Pi 64-Bit](download-link-for-Raspberry-Pi-64-Bit)
