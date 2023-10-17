@@ -188,7 +188,7 @@ void printResponse(String text) {
 
   text = filterResponse(text);
 
-  print('\n$acCyan$text$acReset\n');
+  print('\n$acBold$text$acReset\n');
 }
 
 // function write last response to file
@@ -275,10 +275,12 @@ main(List<String> arguments) async {
   if (apiKey == null) {
     print(
         "To use this application, you need to set an API key. The good news is that due to ht's");
-        
-    print("low token usage, a typical request costs about $0.00025, making it a budget-friendly\ntool for daily usage.");
-        
-    print("You can obtain an API key by signing up at https://platform.openai.com/signup.");
+
+    print(
+        "low token usage, a typical request costs about \$0.00025, making it a budget-friendly\ntool for daily usage.");
+
+    print(
+        "You can obtain an API key by signing up at https://platform.openai.com/signup.");
     print(
         "For a more detailed guide on how to get an OpenAI API key, you can refer to this\narticle:\nhttps://www.howtogeek.com/885918/how-to-get-an-openai-api-key/.");
 
@@ -303,9 +305,7 @@ main(List<String> arguments) async {
       (arguments[0] == '-h') ||
       (arguments[0] == '--help')) {
     print(
-        "\n$acItalic${acBold}ht (for how-to)$acReset,$acItalic a shell command that answers your questions about shell commands.");
-    print(
-        "$acReset$acGrey                                                 https://github.com/catallo/ht$acReset");
+        "\n$acItalic${acBold}ht (for how-to)$acReset,$acItalic a shell command that answers your questions about shell commands.\n");
     print("$acItalic  Usage$acReset:");
     print("$acBold  ht <question>$acReset           - answers question");
     print("$acBold  ht explain|x$acReset            - explains last answer");
@@ -315,7 +315,8 @@ main(List<String> arguments) async {
     print("ht explain");
     print("ht explain ls -lS");
     print('ht explain "ps -aux | grep nvidia"');
-
+    print(
+        "$acReset$acGrey                                                 https://github.com/catallo/ht$acReset");
     exit(0);
   }
 
@@ -335,7 +336,7 @@ main(List<String> arguments) async {
     print("debug:  $debug");
     print(
         "\n${acItalic}Use 'ht -set <setting> <value>' to change setting (or edit ~/.config/ht/config).");
-    print("example: ht -set apikey 123456\n");
+    print("example: ht -set apikey <your-api-key>>\n");
     exit(0);
   }
 
@@ -379,8 +380,7 @@ main(List<String> arguments) async {
 
   // if arguments is -v or --version, print version
   if ((arguments[0] == '-v') || (arguments[0] == '--version')) {
-    print(
-        "\n$acItalic$acBold  ht$acReset$acItalic v$version, https://github.com/catallo/ht $acReset\n");
+    print("\n$acItalic$acBold  ht$acReset$acItalic v$version$acReset\n");
     print("$acGrey  Detected OS:$acBrightGrey     $os");
     print("$acGrey  Detected Distro:$acBrightGrey $distro");
     print("$acGrey  Default Shell:$acBrightGrey   $shell");

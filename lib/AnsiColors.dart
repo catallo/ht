@@ -50,6 +50,35 @@ const String acReverse = '\x1B[7m';
 
 const String acReset = '\x1B[0m';
 
+// cursor movement
+const String acCursorUp = '\x1B[1A';
+const String acCursorDown = '\x1B[1B';
+const String acCursorForward = '\x1B[1C';
+const String acCursorBack = '\x1B[1D';
+
+const String acCursorNextLine = '\x1B[1E';
+const String acCursorPreviousLine = '\x1B[1F';
+
+const String acCursorHorizontalAbsolute = '\x1B[1G';
+
+const String acCursorPosition = '\x1B[1;1H';
+
+const String acEraseDisplay = '\x1B[2J';
+const String acEraseLine = '\x1B[2K';
+
+const String acScrollUp = '\x1B[1S';
+const String acScrollDown = '\x1B[1T';
+
+const String acSaveCursorPosition = '\x1B[s';
+const String acRestoreCursorPosition = '\x1B[u';
+
+const String acHideCursor = '\x1B[?25l';
+const String acShowCursor = '\x1B[?25h';
+
+const String acClearScreen = '\x1B[2J\x1B[0;0H';
+
+const String acClearLine = '\x1B[2K\x1B[0;0H';
+
 void main() {
   // Example usage:
   print(
