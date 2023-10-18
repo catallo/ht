@@ -50,7 +50,7 @@ String systemRole =
     "You're an assistant for using shell on $distro. You always answer with only the command without any further explanation!";
 
 String systemRoleX =
-    "You're an assistant for using shell on $distro. Explain every argument of only the last command, write a newline after every argument. Mention syntax errors. Give short answers.";
+    "You're an assistant for using shell on $distro. Explain every argument used in only the last command, write a newline after every argument. Notice the user when there are syntax errors. Give short answers.";
 
 String prePrompt =
     "$distro $os command to replace every IP address in file logfile with 192.168.0.1\n\nsed -i 's/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/192.168.0.1/g' logfile\n\n$distro $os command to mv file list1 to list2\n\nmv list1 list2\n$distro $os command to ";
@@ -172,11 +172,22 @@ String filterResponse(String text) {
   text = text.replaceAll("\\n", "\n");
   text = text.replaceAll('\\"', '"');
 
+  var lines = text.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].contains("syntax error")) {
+      lines[i] = "$acItalic${lines[i]}$acReset\n";
+    }
+  }
+  text = lines.join("\n");
+
   text = text.replaceAll("```", "");
-  text = text.replaceAll("So, ", "$acItalic\nSo, ");
-  text = text.replaceAll("Note: ", "$acItalic\nNote: ");
-  text = text.replaceAll("Remember, ", "$acItalic\nRemember, ");
-  text = text.replaceAll("Overall, ", "$acItalic\nOverall, ");
+  text = text.replaceAll("So, ", "$acReset$acItalic\nSo, ");
+  text = text.replaceAll("Note: ", "$acReset$acItalic\nNote: ");
+  text = text.replaceAll("Remember, ", "$acReset$acItalic\nRemember, ");
+  text = text.replaceAll("Overall, ", "$acReset$acItalic\nOverall, ");
+  text = text.replaceAll("In general, ", "$acReset$acItalic\nIn general, ");
+  text = text.replaceAll("In short, ", "$acReset$acItalic\nIn short, ");
+  text = text.replaceAll("In summary, ", "$acReset$acItalic\nIn summary, ");
 
   dbg("filtered text: $text");
   return text;
@@ -437,7 +448,9 @@ main(List<String> arguments) async {
   if (response != null) {
     dbg("found in db");
     printResponse(response);
-    saveLastResponse(response);
+    if (!explain) {
+      saveLastResponse(response);
+    }
     exit(0);
   }
 
@@ -445,9 +458,9 @@ main(List<String> arguments) async {
 
   // if the first argument is explain or x, we will explain the last response
   if ((arguments[0] == 'explain' || arguments[0] == 'x')) {
+    explain = true;
     // if there is more than 1 argument
     if (arguments.length > 1) {
-      explain = true;
       // if the second argument is last
       // String joining all arguments except arguments[0]
       var command = arguments.sublist(1).join(' ');
@@ -470,7 +483,7 @@ main(List<String> arguments) async {
   //text = filterResponse(text);
 
   // save as last_response
-  if (explain == false) saveLastResponse(text);
+  if (!explain) saveLastResponse(text);
 
   // save to db
   db.prompt = arguments.join(' ');

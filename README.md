@@ -1,8 +1,8 @@
-***
+****
 
 ### ht - a shell command that answers your questions about shell commands.
 
-***
+****
 
 ![Demo](/docs/demo.gif)
 
