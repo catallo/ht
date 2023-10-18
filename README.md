@@ -1,6 +1,6 @@
 ### ht - a shell command that answers your questions about shell commands.
 
-![](https://github.com/catallo/ht/docs/demo.gif)
+![Demo](/docs/demo.gif)
 
 ##### Usage
 
