@@ -1,8 +1,6 @@
 ### ht - a shell command that answers your questions about shell commands.
 
-<p align="center">
-  <img src="demo/demo.gif" alt="Demo GIF" width="800" height="500">
-</p>
+![Demo GIF](demo/demo.gif)
 
 ##### Usage
 
