@@ -31,6 +31,6 @@ To use ht, you'll need an OpenAI API key. The good news is that due to ht's low 
 
 ##### Downloads
 
-- [Linux x64](download-link-for-Linux-x64) (works on every 64-Bit Linux distro)
-- [Raspberry Pi 32-Bit](download-link-for-Raspberry-Pi-32-Bit)
-- [Raspberry Pi 64-Bit](download-link-for-Raspberry-Pi-64-Bit)
+[ht-v1.0.5 for Linux 64-Bit](https://github.com/catallo/ht/files/13025284/ht-1.0.5-linux64.tar.gz)
+
+[ht-v1.0.5 for Raspberry OS 64-Bit](https://github.com/catallo/ht/files/13025318/ht-1.0.5-raspi64.tar.gz)
