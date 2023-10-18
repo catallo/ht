@@ -33,7 +33,7 @@ final db = DB("", "");
 
 bool debug = false;
 
-const version = "1.0.4"; // SemVer
+const version = "1.0.5"; // SemVer
 const compileDate = "2023-10-18";
 
 final String os = Platform.operatingSystem;
