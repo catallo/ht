@@ -32,7 +32,9 @@ import 'package:ht/config.dart';
 final db = DB("", "");
 
 bool debug = false;
-const version = "1.0.3"; // SemVer
+
+const version = "1.0.4"; // SemVer
+const compileDate = "2023-10-18";
 
 final String os = Platform.operatingSystem;
 String distro = "Debian derivate";
@@ -309,14 +311,17 @@ main(List<String> arguments) async {
     print("$acItalic  Usage$acReset:");
     print("$acBold  ht <question>$acReset           - answers question");
     print("$acBold  ht explain|x$acReset            - explains last answer");
-    print("$acBold  ht explain|x [command]$acReset  - explains command");
+    print("$acBold  ht explain|x [command]$acReset  - explains command\n");
+    print("$acBold  ht -h|--help$acReset            - help");
+    print("$acBold  ht -s|--settings$acReset        - settings overview");
+    print("$acBold  ht -v|--version$acReset         - show version");
     print("$acItalic\nExamples:$acReset");
     print("ht find all IPv4 addresses in log file and write to new file");
     print("ht explain");
     print("ht explain ls -lS");
     print('ht explain "ps -aux | grep nvidia"');
     print(
-        "$acReset$acGrey                                                 https://github.com/catallo/ht$acReset");
+        "$acReset$acGrey                                                   https://github.com/catallo/ht$acReset");
     exit(0);
   }
 
@@ -328,14 +333,13 @@ main(List<String> arguments) async {
 
   // if arguments is -s or --settings, print settings
   if ((arguments[0] == '-s') || (arguments[0] == '--settings')) {
-    print("\nmodel:  $model");
-    //print("apikey: $apiKey");
-    // like above but show only the last 6 characters of the api key
-    print("apikey: ..${apiKey!.substring(apiKey!.length - 6)}");
+    print(acBold);
+    //print("$acBold  model:     $model");
+    print("  ${acBold}apikey:    ..${apiKey!.substring(apiKey!.length - 6)}");
 
-    print("debug:  $debug");
+    print("  debug:     $debug");
     print(
-        "\n${acItalic}Use 'ht -set <setting> <value>' to change setting (or edit ~/.config/ht/config).");
+        "\n$acReset${acItalic}Use 'ht -set <setting> <value>' to change setting (or edit ~/.config/ht/config).");
     print("example: ht -set apikey <your-api-key>>\n");
     exit(0);
   }
@@ -380,7 +384,8 @@ main(List<String> arguments) async {
 
   // if arguments is -v or --version, print version
   if ((arguments[0] == '-v') || (arguments[0] == '--version')) {
-    print("\n$acItalic$acBold  ht$acReset$acItalic v$version$acReset\n");
+    print(
+        "\n$acItalic$acBold  ht$acReset$acItalic v$version ($compileDate)$acReset\n");
     print("$acGrey  Detected OS:$acBrightGrey     $os");
     print("$acGrey  Detected Distro:$acBrightGrey $distro");
     print("$acGrey  Default Shell:$acBrightGrey   $shell");
