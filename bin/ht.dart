@@ -50,7 +50,7 @@ String systemRole =
     "You're an assistant for using shell on $distro. You always answer with only the command without any further explanation!";
 
 String systemRoleX =
-    "You're an assistant for using shell on $distro. Give short answers.";
+    "You're an assistant for using shell on $distro. Explain every argument of only the last command, write a newline after every argument. Mention syntax errors. Give short answers.";
 
 String prePrompt =
     "$distro $os command to replace every IP address in file logfile with 192.168.0.1\n\nsed -i 's/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/192.168.0.1/g' logfile\n\n$distro $os command to mv file list1 to list2\n\nmv list1 list2\n$distro $os command to ";
