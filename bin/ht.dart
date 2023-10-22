@@ -50,7 +50,7 @@ String systemRole =
     "You're an assistant for using shell on $distro. You always answer with only the command without any further explanation!";
 
 String systemRoleX =
-    "You're an assistant for using shell on $distro. Explain every argument used in only the last command, write a newline after every argument. Notice the user when there are syntax errors. Give short answers.";
+    "You're an assistant for using shell on $distro. Explain every argument used in only the last command, write a newline after every argument. Notice the user when there are syntax errors and suggest the correct version. Give short answers.";
 
 String prePrompt =
     "$distro $os command to replace every IP address in file logfile with 192.168.0.1\n\nsed -i 's/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/192.168.0.1/g' logfile\n\n$distro $os command to mv file list1 to list2\n\nmv list1 list2\n$distro $os command to ";
@@ -75,7 +75,7 @@ void explainLastResponse(String lastCommand) {
 
   dbg("prompt: $prompt");
   String explanation =
-      requestGPT(model, systemRoleX, prompt, temp, 512, stop).toString();
+      requestGPT(model, systemRoleX, prompt, temp, 512, "").toString();
 
   // print explanation
   if (explanation != "null") {
@@ -98,7 +98,7 @@ void explainCommand(var command) {
   String prompt = "$prePromptX " + command;
 
   var explanation =
-      requestGPT(model, systemRoleX, prompt, temp, 512, stop).toString();
+      requestGPT(model, systemRoleX, prompt, temp, 512, "").toString();
 
   //explanation = filterResponse(explanation);
 
@@ -174,8 +174,8 @@ String filterResponse(String text) {
 
   var lines = text.split("\n");
   for (var i = 0; i < lines.length; i++) {
-    if (lines[i].contains("syntax error")) {
-      lines[i] = "$acItalic${lines[i]}$acReset\n";
+    if (lines[i].contains("syntax error") || lines[i].contains("incorrect")) {
+      lines[i] = "$acBold$acItalic${lines[i]}$acReset\n";
     }
   }
   text = lines.join("\n");
@@ -273,6 +273,14 @@ void gatherSystemInfo() {
   // trim shell to the last part after the last /
   shell = shell.substring(shell.lastIndexOf('/') + 1);
   dbg("shell: $shell");
+}
+
+void executeCommand(String command) async {
+  print("executing $command");
+  final p = await Process.start('bash', ['-c', 'sleep 3']);
+  await stdout.addStream(p.stdout);
+
+  print('the end 😎');
 }
 
 main(List<String> arguments) async {
@@ -468,6 +476,35 @@ main(List<String> arguments) async {
     } else {
       print("${acItalic}Usage:$acReset ht explain|x [command]");
       exit(1);
+    }
+  }
+
+  // if the first argument is e or execute, we will execute the last response
+  if ((arguments[0] == 'e') || (arguments[0] == 'execute')) {
+    // run only if there is one argument
+    if (arguments.length == 1) {
+      // check if file ~/.config/ht/last_response exists
+      var lastResponseFile =
+          File('${Platform.environment['HOME']}/.config/ht/last_response');
+      if (lastResponseFile.existsSync()) {
+        // read last command
+        String lastCommand = lastResponseFile.readAsStringSync();
+        dbg('last command: $lastCommand');
+        print("${acBold}executing $lastCommand$acReset");
+        // ask user if he wants to execute last command
+        stdout.write(
+            "${acBold}Are you sure you want to execute this command? (y/N): $acReset");
+        var answer = stdin.readLineSync();
+        if (answer != "y") {
+          print("Exiting...");
+          exit(0);
+        }
+        // execute last command and wait until it's finished
+        executeCommand(lastCommand);
+
+        // not working yet
+        exit(0);
+      }
     }
   }
 
