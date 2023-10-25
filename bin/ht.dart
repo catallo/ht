@@ -56,13 +56,13 @@ String prePrompt =
     "$distro $os command to replace every IP address in file logfile with 192.168.0.1\n\nsed -i 's/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/192.168.0.1/g' logfile\n\n$distro $os command to mv file list1 to list2\n\nmv list1 list2\n$distro $os command to ";
 
 String prePromptX =
-    "Explain $os command ls -l -R\n\nls lists directory contents\n-l lists in long format\n-R lists subdirectories recursively.\n\nExplain $os command rm -rf\n\nrm removes files or directories\n-r removes directories and their contents recursively\n-f ignores nonexistent files and arguments, never prompts\n/ is the root directory\n\nExplain $os command";
+    "Explain $os command ls -l -R\n\nls lists directory contents\n  -l lists in long format\n-  R lists subdirectories recursively.\n\nExplain $os command rm -rf\n\nrm removes files or directories\n  -r removes directories and their contents recursively\n  -f ignores nonexistent files and arguments, never prompts\n  / is the root directory\n\nExplain $os command";
 
 // String prePromptX = "";
 
 final String stop = "Explain $os command";
 
-// function explain last response
+// explain last response ───────────────────────────────────────────────────────
 void explainLastResponse(String lastCommand) {
   //print("$acBold$lastCommand$acReset");
 
@@ -92,7 +92,7 @@ void explainLastResponse(String lastCommand) {
   }
 }
 
-// function to explain command
+// explain command ─────────────────────────────────────────────────────────────
 void explainCommand(var command) {
   prePromptX = prePromptX.replaceAll("\n", "\\n");
   String prompt = "$prePromptX " + command;
@@ -112,7 +112,7 @@ void explainCommand(var command) {
   exit(0);
 }
 
-// request to OpenAI API
+// request to OpenAI API ───────────────────────────────────────────────────────
 String? requestGPT(String model, String role, String prompt, String temperature,
     int maxTokens, String stop) {
   String roleJSON = jsonEncode(role);
@@ -164,7 +164,7 @@ String? requestGPT(String model, String role, String prompt, String temperature,
   return response['choices'][0]['message']['content'];
 }
 
-// function filterResponse
+// filterResponse ──────────────────────────────────────────────────────────────
 String filterResponse(String text) {
   text = text.replaceAll("\n\n", "\n");
   text = text.replaceAll("\\n\\n", "\n");
@@ -183,17 +183,18 @@ String filterResponse(String text) {
   text = text.replaceAll("```", "");
   text = text.replaceAll("So, ", "$acReset$acItalic\nSo, ");
   text = text.replaceAll("Note: ", "$acReset$acItalic\nNote: ");
-  text = text.replaceAll("Remember, ", "$acReset$acItalic\nRemember, ");
   text = text.replaceAll("Overall, ", "$acReset$acItalic\nOverall, ");
-  text = text.replaceAll("In general, ", "$acReset$acItalic\nIn general, ");
+  text = text.replaceAll("Together, ", "$acReset$acItalic\nTogether, ");
+  text = text.replaceAll("Remember, ", "$acReset$acItalic\nRemember, ");
   text = text.replaceAll("In short, ", "$acReset$acItalic\nIn short, ");
+  text = text.replaceAll("In general, ", "$acReset$acItalic\nIn general, ");
   text = text.replaceAll("In summary, ", "$acReset$acItalic\nIn summary, ");
 
   dbg("filtered text: $text");
   return text;
 }
 
-// function to print response
+// print response ──────────────────────────────────────────────────────────────
 void printResponse(String text) {
   //text = text.replaceAll("\n", "\n  ");
   //text = text.replaceAll("\\n", "\n  ");
@@ -201,10 +202,30 @@ void printResponse(String text) {
 
   text = filterResponse(text);
 
-  print('\n$acBold$text$acReset\n');
+  // make sure lines are not longer than terminal width
+  var terminalWidth = stdout.terminalColumns;
+  var lines = text.split("\n");
+  var newLines = <String>[];
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    var words = line.split(" ");
+    var newLine = "";
+    for (var j = 0; j < words.length; j++) {
+      var word = words[j];
+      if (newLine.length + word.length + 1 > terminalWidth) {
+        newLines.add(newLine);
+        newLine = "";
+      }
+      newLine += "$word ";
+    }
+    newLines.add(newLine);
+  }
+  text = newLines.join("\n");
+
+  print('\n$text$acReset\n');
 }
 
-// function write last response to file
+// write last response to file ─────────────────────────────────────────────────
 void saveLastResponse(String text) {
   var home = Platform.environment['HOME'];
   dbg("home: $home");
@@ -220,13 +241,13 @@ void saveLastResponse(String text) {
   dbg("writing to last_response: $text ");
 }
 
-// debug function
+// debug output ────────────────────────────────────────────────────────────────
 void dbg(String text) {
   if (!debug) return;
   print("\x1B[34mdbg:\x1B[0m \x1B[33m$text\x1B[0m");
 }
 
-// calculate costs
+// calculate costs ─────────────────────────────────────────────────────────────
 void calculateCost(String processStdout) {
   String? promptTokens = "0";
   var promptTokensReg =
@@ -257,7 +278,7 @@ void calculateCost(String processStdout) {
   dbg("cost: \$ $cost");
 }
 
-// function gather information about the system
+// gather information about system ─────────────────────────────────────────────
 void gatherSystemInfo() {
   dbg("os: $os");
 
@@ -275,14 +296,12 @@ void gatherSystemInfo() {
   dbg("shell: $shell");
 }
 
+// execute command ─────────────────────────────────────────────────────────────
 void executeCommand(String command) async {
-  print("executing $command");
-  final p = await Process.start('bash', ['-c', 'sleep 3']);
-  await stdout.addStream(p.stdout);
-
-  print('the end 😎');
+  // not implemented yet
 }
 
+// main ────────────────────────────────────────────────────────────────────────
 main(List<String> arguments) async {
   gatherSystemInfo();
 
