@@ -202,7 +202,7 @@ void printResponse(String text) {
 
   text = filterResponse(text);
 
-  // make sure lines are not longer than terminal width
+  // ensure lines in the output do not exceed terminal width
   var terminalWidth = stdout.terminalColumns;
   var lines = text.split("\n");
   var newLines = <String>[];
