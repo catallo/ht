@@ -4,3 +4,6 @@
 
 # Conventional directory for build output.
 build/
+
+# bin/ht.exe
+bin/ht.exe
