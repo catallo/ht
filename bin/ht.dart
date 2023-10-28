@@ -174,8 +174,14 @@ String filterResponse(String text) {
 
   var lines = text.split("\n");
   for (var i = 0; i < lines.length; i++) {
-    if (lines[i].contains("syntax error") || lines[i].contains("incorrect")) {
-      lines[i] = "$acBold$acItalic${lines[i]}$acReset\n";
+    if (lines[i].contains("syntax error") ||
+        lines[i].contains("incorrect") ||
+        lines[i].contains("not a valid command")) {
+      lines[i] = "$acBold${lines[i]}$acReset\n";
+    }
+    // if line starts with "- ", replace with "  "
+    if (lines[i].startsWith("- ")) {
+      lines[i] = "  ${lines[i].substring(2)}";
     }
   }
   text = lines.join("\n");
@@ -184,11 +190,18 @@ String filterResponse(String text) {
   text = text.replaceAll("So, ", "$acReset$acItalic\nSo, ");
   text = text.replaceAll("Note: ", "$acReset$acItalic\nNote: ");
   text = text.replaceAll("Overall, ", "$acReset$acItalic\nOverall, ");
+  text = text.replaceAll("However, ", "$acReset$acItalic\nHowever, ");
   text = text.replaceAll("Together, ", "$acReset$acItalic\nTogether, ");
   text = text.replaceAll("Remember, ", "$acReset$acItalic\nRemember, ");
   text = text.replaceAll("In short, ", "$acReset$acItalic\nIn short, ");
   text = text.replaceAll("In general, ", "$acReset$acItalic\nIn general, ");
   text = text.replaceAll("In summary, ", "$acReset$acItalic\nIn summary, ");
+  text = text.replaceAll("Please note ", "$acReset$acItalic\nPlease note ");
+  text = text.replaceAll("This command ", "$acReset$acItalic\nThis command ");
+  text = text.replaceAll(
+      "Please remember ", "$acReset$acItalic\nPlease remember ");
+  text = text.replaceAll(
+      "Please keep in mind ", "$acReset$acItalic\nPlease keep in mind ");
 
   dbg("filtered text: $text");
   return text;
@@ -220,8 +233,8 @@ void printResponse(String text) {
     }
     newLines.add(newLine);
   }
-  text = newLines.join("\n");
 
+  text = newLines.join("\n");
   print('\n$text$acReset\n');
 }
 
