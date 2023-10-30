@@ -12,3 +12,4 @@ dev_dependencies:
   test: ^1.16.0
 dependencies:
   dart_openai: ^4.0.0
+  http: ^1.1.0

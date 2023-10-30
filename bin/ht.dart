@@ -29,6 +29,8 @@ import 'package:ht/db.dart';
 import 'package:ht/AnsiColors.dart';
 import 'package:ht/config.dart';
 
+import 'package:http/http.dart' as http;
+
 final db = DB("", "");
 
 bool debug = false;
@@ -49,14 +51,19 @@ String? apiKey = "";
 String systemRole =
     "You're an assistant for using shell on $distro. You always answer with only the command without any further explanation!";
 
+//String systemRoleX =
+//    "You're a shell command for using shell on $distro. Explain every argument used in only the last command, write a newline after every argument. Check the command for syntax errors and suggest the correct version if an error is found. Give short answers.";
+
 String systemRoleX =
-    "You're an assistant for using shell on $distro. Explain every argument used in only the last command, write a newline after every argument. Notice the user when there are syntax errors and suggest the correct version. Give short answers.";
+    "You're an assistant for using shell on $distro. You're given a shell command that you will analyse by conducting the following steps:\\n1. Check the command for syntax errors and if an error is found suggest the correct version.\\n2. Explain every argument used in only the last command followed by a newline.\\nGive short answers.";
 
 String prePrompt =
     "$distro $os command to replace every IP address in file logfile with 192.168.0.1\n\nsed -i 's/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/192.168.0.1/g' logfile\n\n$distro $os command to mv file list1 to list2\n\nmv list1 list2\n$distro $os command to ";
 
 String prePromptX =
     "Explain $os command ls -l -R\n\nls lists directory contents\n  -l lists in long format\n-  R lists subdirectories recursively.\n\nExplain $os command rm -rf\n\nrm removes files or directories\n  -r removes directories and their contents recursively\n  -f ignores nonexistent files and arguments, never prompts\n  / is the root directory\n\nExplain $os command";
+
+//String prePromptX = "Explain $os command";
 
 // String prePromptX = "";
 
@@ -112,8 +119,52 @@ void explainCommand(var command) {
   exit(0);
 }
 
-// request to OpenAI API ───────────────────────────────────────────────────────
-String? requestGPT(String model, String role, String prompt, String temperature,
+Future requestGPT(String model, String role, String prompt, String temperature,
+    int maxTokens, String stop) async {
+  String roleJSON = jsonEncode(role);
+  String promptJSON = jsonEncode(prompt);
+
+  dbg("roleJSON: $roleJSON");
+  dbg("promptJSON: $promptJSON");
+
+  var response = await http.post(
+    Uri.parse('https://api.openai.com/v1/chat/completions'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $apiKey',
+    },
+    body: jsonEncode({
+      'model': model,
+      'messages': [
+        {'role': 'system', 'content': role},
+        {'role': 'user', 'content': promptJSON}
+      ],
+      'temperature': temperature,
+      'max_tokens': maxTokens,
+      'stream': false
+    }),
+  );
+
+  dbg("response.body: ${response.body}");
+
+  calculateCost(response.body);
+
+  Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+  // check json response for errors
+  if (responseBody.containsKey('error')) {
+    throw Exception(responseBody['error']);
+  }
+
+  String? text = responseBody['choices'][0]['text'];
+
+  if (text == null) {
+    return null;
+  }
+
+  return text.trim();
+}
+/* String? requestGPT(String model, String role, String prompt, String temperature,
     int maxTokens, String stop) {
   String roleJSON = jsonEncode(role);
   String promptJSON = jsonEncode(prompt);
@@ -128,9 +179,6 @@ String? requestGPT(String model, String role, String prompt, String temperature,
     "-H",
     "Authorization: Bearer $apiKey",
     "-d",
-    // add role system to prompt
-    //
-
     '{"model": "$model", "messages": [{"role": "system", "content" : "$role"}, {"role": "user", "content": $promptJSON}], "temperature": $temperature, "max_tokens": 512, "stream": false}'
   ]);
   dbg("process.stdout: ${process.stdout}");
@@ -153,7 +201,6 @@ String? requestGPT(String model, String role, String prompt, String temperature,
       default:
         print("Unknown error code: ${response['error']['code']}");
     }
-
     exit(1);
   }
 
@@ -162,7 +209,7 @@ String? requestGPT(String model, String role, String prompt, String temperature,
   returnValue = returnValue.replaceAll("\\\\", "\\");
 
   return response['choices'][0]['message']['content'];
-}
+} */
 
 // filterResponse ──────────────────────────────────────────────────────────────
 String filterResponse(String text) {
@@ -174,14 +221,17 @@ String filterResponse(String text) {
 
   var lines = text.split("\n");
   for (var i = 0; i < lines.length; i++) {
+    // if line starts with "- ", replace with "  "
+    if (lines[i].startsWith("- ")) {
+      lines[i] = "  ${lines[i].substring(2)}";
+    }
+    if (lines[i].startsWith("The last command you mentioned, ")) {
+      lines[i] = lines[i].substring(32);
+    }
     if (lines[i].contains("syntax error") ||
         lines[i].contains("incorrect") ||
         lines[i].contains("not a valid command")) {
       lines[i] = "$acBold${lines[i]}$acReset\n";
-    }
-    // if line starts with "- ", replace with "  "
-    if (lines[i].startsWith("- ")) {
-      lines[i] = "  ${lines[i].substring(2)}";
     }
   }
   text = lines.join("\n");
