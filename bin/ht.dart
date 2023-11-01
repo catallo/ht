@@ -29,8 +29,6 @@ import 'package:ht/db.dart';
 import 'package:ht/AnsiColors.dart';
 import 'package:ht/config.dart';
 
-import 'package:http/http.dart' as http;
-
 final db = DB("", "");
 
 bool debug = false;
@@ -55,7 +53,10 @@ String systemRole =
 //    "You're a shell command for using shell on $distro. Explain every argument used in only the last command, write a newline after every argument. Check the command for syntax errors and suggest the correct version if an error is found. Give short answers.";
 
 String systemRoleX =
-    "You're an assistant for using shell on $distro. You're given a shell command that you will analyse by conducting the following steps:\\n1. Check the command for syntax errors and if an error is found suggest the correct version.\\n2. Explain every argument used in only the last command followed by a newline.\\nGive short answers.";
+    // ignore: prefer_interpolation_to_compose_strings
+    "You're an assistant for using shell on $distro. You're given a shell command that you will analyse by conducting the following steps:"
+    "\\n1. Check the command for syntax errors and if an error is found suggest the correct version.\\n2. Explain every argument used in"
+    " only the last command followed by a newline.\\nGive short answers.";
 
 String prePrompt =
     "$distro $os command to replace every IP address in file logfile with 192.168.0.1\n\nsed -i 's/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/192.168.0.1/g' logfile\n\n$distro $os command to mv file list1 to list2\n\nmv list1 list2\n$distro $os command to ";
@@ -119,52 +120,8 @@ void explainCommand(var command) {
   exit(0);
 }
 
-Future requestGPT(String model, String role, String prompt, String temperature,
-    int maxTokens, String stop) async {
-  String roleJSON = jsonEncode(role);
-  String promptJSON = jsonEncode(prompt);
-
-  dbg("roleJSON: $roleJSON");
-  dbg("promptJSON: $promptJSON");
-
-  var response = await http.post(
-    Uri.parse('https://api.openai.com/v1/chat/completions'),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $apiKey',
-    },
-    body: jsonEncode({
-      'model': model,
-      'messages': [
-        {'role': 'system', 'content': role},
-        {'role': 'user', 'content': promptJSON}
-      ],
-      'temperature': temperature,
-      'max_tokens': maxTokens,
-      'stream': false
-    }),
-  );
-
-  dbg("response.body: ${response.body}");
-
-  calculateCost(response.body);
-
-  Map<String, dynamic> responseBody = jsonDecode(response.body);
-
-  // check json response for errors
-  if (responseBody.containsKey('error')) {
-    throw Exception(responseBody['error']);
-  }
-
-  String? text = responseBody['choices'][0]['text'];
-
-  if (text == null) {
-    return null;
-  }
-
-  return text.trim();
-}
-/* String? requestGPT(String model, String role, String prompt, String temperature,
+// request to OpenAI API ───────────────────────────────────────────────────────
+String? requestGPT(String model, String role, String prompt, String temperature,
     int maxTokens, String stop) {
   String roleJSON = jsonEncode(role);
   String promptJSON = jsonEncode(prompt);
@@ -209,7 +166,7 @@ Future requestGPT(String model, String role, String prompt, String temperature,
   returnValue = returnValue.replaceAll("\\\\", "\\");
 
   return response['choices'][0]['message']['content'];
-} */
+}
 
 // filterResponse ──────────────────────────────────────────────────────────────
 String filterResponse(String text) {
@@ -230,7 +187,7 @@ String filterResponse(String text) {
     }
     if (lines[i].contains("syntax error") ||
         lines[i].contains("incorrect") ||
-        lines[i].contains("not a valid command")) {
+        lines[i].contains("not a valid")) {
       lines[i] = "$acBold${lines[i]}$acReset\n";
     }
   }
@@ -360,8 +317,34 @@ void gatherSystemInfo() {
 }
 
 // execute command ─────────────────────────────────────────────────────────────
-void executeCommand(String command) async {
-  // not implemented yet
+Future<bool> executeCommand(String commandWithArguments) async {
+  print("executing $commandWithArguments:\n");
+
+  var home = Platform.environment['HOME'];
+  var filePath = '$home/.config/ht/execute';
+
+  await File(filePath).writeAsString(commandWithArguments);
+
+  await Future.delayed(Duration(seconds: 1));
+
+  var width = stdout.terminalColumns;
+  var height = stdout.terminalLines;
+
+  Process process = await Process.start('bash', [filePath],
+      environment: {'COLUMNS': width.toString(), 'LINES': height.toString()});
+
+  process.stdout.transform(utf8.decoder).listen((data) {
+    stdout.write(data);
+  });
+
+  process.stderr.transform(utf8.decoder).listen((data) {
+    print('stderr: $data');
+  });
+
+  int exitCode = await process.exitCode;
+  //print('Command exited with code $exitCode');
+
+  return exitCode == 0;
 }
 
 // main ────────────────────────────────────────────────────────────────────────
@@ -411,8 +394,8 @@ main(List<String> arguments) async {
         "\n$acItalic${acBold}ht (for how-to)$acReset,$acItalic a shell command that answers your questions about shell commands.\n");
     print("$acItalic  Usage$acReset:");
     print("$acBold  ht <question>$acReset           - answers question");
-    print("$acBold  ht explain|x$acReset            - explains last answer");
-    print("$acBold  ht explain|x [command]$acReset  - explains command\n");
+    print("$acBold  ht e|explain$acReset            - explains last answer");
+    print("$acBold  ht e|explain [command]$acReset  - explains command\n");
     print("$acBold  ht -h|--help$acReset            - help");
     print("$acBold  ht -s|--settings$acReset        - settings overview");
     print("$acBold  ht -v|--version$acReset         - show version");
@@ -501,7 +484,7 @@ main(List<String> arguments) async {
 
   var explain = false;
 
-  if (arguments[0] == 'x' || arguments[0] == 'explain') {
+  if (arguments[0] == 'e' || arguments[0] == 'explain') {
     explain = true;
     // if there is only one argument
     if (arguments.length == 1) {
@@ -546,8 +529,8 @@ main(List<String> arguments) async {
 
   // last response ─────────────────────────────────────────────────────────────
 
-  // if the first argument is explain or x, we will explain the last response
-  if ((arguments[0] == 'explain' || arguments[0] == 'x')) {
+  // if the first argument is explain or e, we will explain the last response
+  if ((arguments[0] == 'explain' || arguments[0] == 'e')) {
     explain = true;
     // if there is more than 1 argument
     if (arguments.length > 1) {
@@ -556,13 +539,13 @@ main(List<String> arguments) async {
       var command = arguments.sublist(1).join(' ');
       explainCommand(command);
     } else {
-      print("${acItalic}Usage:$acReset ht explain|x [command]");
+      print("${acItalic}Usage:$acReset ht e|explain [command]");
       exit(1);
     }
   }
 
-  // if the first argument is e or execute, we will execute the last response
-  if ((arguments[0] == 'e') || (arguments[0] == 'execute')) {
+  // if the first argument is x or execute, we will execute the last response
+  if ((arguments[0] == 'x') || (arguments[0] == 'execute')) {
     // run only if there is one argument
     if (arguments.length == 1) {
       // check if file ~/.config/ht/last_response exists
@@ -572,7 +555,28 @@ main(List<String> arguments) async {
         // read last command
         String lastCommand = lastResponseFile.readAsStringSync();
         dbg('last command: $lastCommand');
-        print("${acBold}executing $lastCommand$acReset");
+
+        // a print message that says we are checking the last command for validity
+        stdout.write("checking $lastCommand$acReset ... ");
+
+        var validCheck = requestGPT(
+            model,
+            'Your Job is to return ##ERROR: followed by the reason and ## if a Linux shell command contains Syntax Errors and ##VALID## if it is valid. Commands containing placeholders like [file] are not valid. If the command wants to start a program like mc, assume it is installed.',
+            lastCommand,
+            temp,
+            512,
+            "");
+
+        // if command is not NULL or not valid, exit
+        if (validCheck != null && validCheck.contains("##ERROR:")) {
+          // print reason for invalidity but without ##ERROR:
+          print("${acBold}invalid command: ${validCheck.substring(9)}$acReset");
+          print("Exiting...");
+          exit(1);
+        }
+
+        stdout.write("command is valid");
+        print(acReset);
         // ask user if he wants to execute last command
         stdout.write(
             "${acBold}Are you sure you want to execute this command? (y/N): $acReset");
@@ -582,9 +586,9 @@ main(List<String> arguments) async {
           exit(0);
         }
         // execute last command and wait until it's finished
-        executeCommand(lastCommand);
 
-        // not working yet
+        await executeCommand(lastCommand);
+
         exit(0);
       }
     }
