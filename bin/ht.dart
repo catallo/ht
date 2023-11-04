@@ -64,10 +64,6 @@ String prePrompt =
 String prePromptX =
     "Explain $os command ls -l -R\n\nls lists directory contents\n  -l lists in long format\n-  R lists subdirectories recursively.\n\nExplain $os command rm -rf\n\nrm removes files or directories\n  -r removes directories and their contents recursively\n  -f ignores nonexistent files and arguments, never prompts\n  / is the root directory\n\nExplain $os command";
 
-//String prePromptX = "Explain $os command";
-
-// String prePromptX = "";
-
 final String stop = "Explain $os command";
 
 // explain last response ───────────────────────────────────────────────────────
@@ -103,6 +99,7 @@ void explainLastResponse(String lastCommand) {
 // explain command ─────────────────────────────────────────────────────────────
 void explainCommand(var command) {
   prePromptX = prePromptX.replaceAll("\n", "\\n");
+
   String prompt = "$prePromptX " + command;
 
   var explanation =
@@ -242,6 +239,7 @@ void printResponse(String text) {
   }
 
   text = newLines.join("\n");
+
   print('\n$text$acReset\n');
 }
 
@@ -318,17 +316,20 @@ void gatherSystemInfo() {
 
 // execute command ─────────────────────────────────────────────────────────────
 Future<bool> executeCommand(String commandWithArguments) async {
-  print("executing $commandWithArguments:\n");
+  //print("executing $commandWithArguments:");
 
   var home = Platform.environment['HOME'];
   var filePath = '$home/.config/ht/execute';
 
   await File(filePath).writeAsString(commandWithArguments);
 
-  await Future.delayed(Duration(seconds: 1));
-
   var width = stdout.terminalColumns;
   var height = stdout.terminalLines;
+
+  print(acGrey + List.filled(width, '─').join() + acReset);
+  print("");
+
+  await Future.delayed(Duration(milliseconds: 500));
 
   Process process = await Process.start('bash', [filePath],
       environment: {'COLUMNS': width.toString(), 'LINES': height.toString()});
@@ -337,13 +338,19 @@ Future<bool> executeCommand(String commandWithArguments) async {
     stdout.write(data);
   });
 
-  process.stderr.transform(utf8.decoder).listen((data) {
-    print('stderr: $data');
-  });
-
   int exitCode = await process.exitCode;
   //print('Command exited with code $exitCode');
 
+  // print out the result of stderr from the process
+  String stdError = await process.stderr.transform(utf8.decoder).join();
+  if (stdError.isNotEmpty) {
+    // there are two ":" in the error message, we want the string right from the second ":"
+    var error = stdError.substring(stdError.indexOf(":") + 1);
+    error = error.substring(error.indexOf(":") + 1);
+    error = error.trim();
+
+    print("${acBold}Error: $acBrightRed$error$acReset");
+  }
   return exitCode == 0;
 }
 
@@ -361,10 +368,8 @@ main(List<String> arguments) async {
   if (apiKey == null) {
     print(
         "To use this application, you need to set an API key. The good news is that due to ht's");
-
     print(
         "low token usage, a typical request costs about \$0.00025, making it a budget-friendly\ntool for daily usage.");
-
     print(
         "You can obtain an API key by signing up at https://platform.openai.com/signup.");
     print(
@@ -544,6 +549,8 @@ main(List<String> arguments) async {
     }
   }
 
+  // execute last response ─────────────────────────────────────────────────────
+
   // if the first argument is x or execute, we will execute the last response
   if ((arguments[0] == 'x') || (arguments[0] == 'execute')) {
     // run only if there is one argument
@@ -557,36 +564,31 @@ main(List<String> arguments) async {
         dbg('last command: $lastCommand');
 
         // a print message that says we are checking the last command for validity
-        stdout.write("checking $lastCommand$acReset ... ");
+        stdout.write("checking $acBold$lastCommand$acReset ... ");
 
-        var validCheck = requestGPT(
-            model,
-            'Your Job is to return ##ERROR: followed by the reason and ## if a Linux shell command contains Syntax Errors and ##VALID## if it is valid. Commands containing placeholders like [file] are not valid. If the command wants to start a program like mc, assume it is installed.',
-            lastCommand,
-            temp,
-            512,
-            "");
+        String placeholderCheckPrompt =
+            "Would the Linux shell command: '$lastCommand' work as is on $distro?";
 
+        var validCheck =
+            requestGPT(model, "", placeholderCheckPrompt, temp, 512, "");
+        print(validCheck);
         // if command is not NULL or not valid, exit
         if (validCheck != null && validCheck.contains("##ERROR:")) {
           // print reason for invalidity but without ##ERROR:
-          print("${acBold}invalid command: ${validCheck.substring(9)}$acReset");
-          print("Exiting...");
-          exit(1);
+          print("$acBold$acBrightRed"
+              "\n\n${acBold}Warning: $acReset$acRed${validCheck.substring(9)}$acReset");
+          stdout.write("\nDo you want to run it anyway? (y/N):");
+        } else {
+          stdout.write(
+              "\n$acBold✓$acReset Command is valid.\nDo you want to execute it? (y/N):");
         }
-
-        stdout.write("command is valid");
-        print(acReset);
-        // ask user if he wants to execute last command
-        stdout.write(
-            "${acBold}Are you sure you want to execute this command? (y/N): $acReset");
         var answer = stdin.readLineSync();
         if (answer != "y") {
           print("Exiting...");
           exit(0);
         }
         // execute last command and wait until it's finished
-
+        print(acReset);
         await executeCommand(lastCommand);
 
         exit(0);
@@ -600,20 +602,22 @@ main(List<String> arguments) async {
 
   dbg("prompt: $prompt");
 
-  var text = requestGPT(model, systemRole, prompt, temp, 512, stop).toString();
-  dbg("request result: $text");
+  var theAnswer =
+      requestGPT(model, systemRole, prompt, temp, 512, stop).toString();
+
+  dbg("request result: $theAnswer");
 
   //text = filterResponse(text);
 
   // save as last_response
-  if (!explain) saveLastResponse(text);
+  if (!explain) saveLastResponse(theAnswer);
 
   // save to db
   db.prompt = arguments.join(' ');
-  db.response = text;
+  db.response = theAnswer;
   db.save();
 
-  printResponse(text);
+  printResponse(theAnswer);
 
   exit(0);
 }

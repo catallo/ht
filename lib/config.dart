@@ -46,7 +46,6 @@ class Config {
 
     for (var line in lines) {
       var parts = line.split(':');
-
       if (parts[0] == 'API-KEY') {
         return parts[1].trim();
       }
@@ -54,7 +53,7 @@ class Config {
     return null;
   }
 
-  // method to set API key in config file
+  // set API key
   bool setApiKey(String apiKey) {
     // check if API key is in file
     var file = File('$home/.config/ht/config').readAsStringSync();
@@ -87,7 +86,6 @@ class Config {
   bool? readDebug() {
     var file = File('$home/.config/ht/config').readAsStringSync();
     var lines = file.split('\n');
-
     for (var line in lines) {
       var parts = line.split(':');
       if (parts[0] == 'debug') {
