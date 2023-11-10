@@ -304,8 +304,12 @@ void gatherSystemInfo() {
   uname = out.stdout.toString().trim();
   dbg("uname: $uname");
 
-  // send uname to checkDistro function
-  distro = checkDistro(uname) ?? "Debian derivate";
+  if (Platform.isMacOS) {
+    distro = "MacOS";
+  } else {
+    distro = checkDistro(uname) ?? "Debian derivate";
+  }
+
   dbg("distro: $distro");
 
   shell = Platform.environment['SHELL']!;
@@ -329,7 +333,7 @@ Future<bool> executeCommand(String commandWithArguments) async {
   print(acGrey + List.filled(width, '─').join() + acReset);
   print("");
 
-  await Future.delayed(Duration(milliseconds: 500));
+  await Future.delayed(Duration(milliseconds: 300));
 
   Process process = await Process.start('bash', [filePath],
       environment: {'COLUMNS': width.toString(), 'LINES': height.toString()});
