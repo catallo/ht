@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: dart_openai
-      sha256: "707f6975454513f4a6197125b5a0fbe92ab7cbe4b8ea9111e529a09d7a3ce0c3"
+      sha256: "080883dc9d7896475798012bca56551e2274fd01cef7ca39f81fe9290dd17c31"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.1.2"
   fetch_api:
     dependency: transitive
     description:
