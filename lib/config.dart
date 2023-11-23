@@ -27,7 +27,6 @@ class Config {
         return false;
       }
     }
-
     final configFile = File(_getConfigFilePath());
     if (!configFile.existsSync()) {
       try {
@@ -41,7 +40,7 @@ class Config {
     return true;
   }
 
-  // Read property from the config file
+  // Read property from config file
   String? _readProperty(String propertyName) {
     final configFile = File(_getConfigFilePath());
     final fileContents = configFile.readAsStringSync();
@@ -56,7 +55,7 @@ class Config {
     return null;
   }
 
-// Set property in the config file
+// Set property in config file
   bool _setProperty(String propertyName, String propertyValue) {
     final configFile = File(_getConfigFilePath());
     final regex = RegExp('$propertyName:.*');
