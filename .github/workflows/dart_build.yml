@@ -1,1 +1,22 @@
- 
+name: Dart Build
+
+on: [push]
+
+jobs:
+  compile:
+    name: Compile Dart Project
+    strategy:
+      matrix:
+        include:
+          - runs-on: ubuntu-latest
+            binary-name: mycli_linux_amd64
+          - runs-on: macos-latest
+            binary-name: mycli_macos_amd64
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+      - run: mkdir out
+      - run: dart compile exe bin/mycli.dart -o out/${{ matrix.binary-name }}
+      
