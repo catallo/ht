@@ -72,7 +72,8 @@ String promptExUser5 =
 
 String promptExAssistant5 = """#ERR: The comands name is mkdir, not mkdirr.
 #ERR: The name of the bash configuration file is .bashrc, not .bashrt
-#COR: mkdir ~/bin && echo "export PATH=\$PATH:\$HOME/bin" >> ~/.bashrc
+#ERR: The rm command requires the -r (or --recursive) flag to remove directories and their contents recursively
+#COR: mkdir ~/bin && echo "export PATH=\$PATH:\$HOME/bin" >> ~/.bashrc; rm / -r
 #WRN: Warning! This command is attempting to remove the root directory ("/") which results in the deletion of the entire file system.
 #CMD: mkdir #DSCR: creates new directory
 #SB1: ~/bin #DSCR: specifies path of new directory to add to PATH

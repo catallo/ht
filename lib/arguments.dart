@@ -6,7 +6,7 @@ import 'package:ht/cache.dart';
 import 'package:ht/ter_print.dart';
 
 bool parseArguments(List arguments) {
-  // if arguments is empty ─────────────────────────────────────────────────────
+  // help ──────────────────────────────────────────────────────────────────────
   if (arguments.isEmpty ||
       (arguments[0] == '-h') ||
       (arguments[0] == '--help')) {
@@ -30,13 +30,13 @@ bool parseArguments(List arguments) {
     return false;
   }
 
-  // if arguments starts with -d or --debug, set debug to true ─────────────────
+  // debug ─────────────────────────────────────────────────────────────────────
   if ((arguments[0] == '-d') || (arguments[0] == '--debug')) {
     debug = true;
     arguments = arguments.sublist(1);
   }
 
-  // if arguments is -s or --settings, print settings ──────────────────────────
+  // show settings ─────────────────────────────────────────────────────────────
   if ((arguments[0] == '-s') || (arguments[0] == '--settings')) {
     print(acBold);
     //print("$acBold  model:     $model");
@@ -49,7 +49,7 @@ bool parseArguments(List arguments) {
     return false;
   }
 
-  // if starts with -set, set setting ──────────────────────────────────────────
+  // set setting ───────────────────────────────────────────────────────────────
   if (arguments[0] == '-set') {
     if (arguments.length != 3) {
       print("\n$acBold  Wrong number of arguments.\n");
@@ -86,7 +86,7 @@ bool parseArguments(List arguments) {
     }
     return false;
   }
-  // if arguments is -v or --version, print version ────────────────────────────
+  // version ───────────────────────────────────────────────────────────────────
   if ((arguments[0] == '-v') || (arguments[0] == '--version')) {
     print(
         "\n$acItalic$acBold  ht$acReset$acItalic v$version ($compileDate)$acReset\n");
@@ -97,7 +97,7 @@ bool parseArguments(List arguments) {
 
     return false;
   }
-  // if first argument is explain or e, explain the last response ──────────────
+  // explain last response ─────────────────────────────────────────────────────
   if ((arguments[0] == 'explain' || arguments[0] == 'e')) {
     var command = "";
 
@@ -117,12 +117,9 @@ bool parseArguments(List arguments) {
         exit(1);
       }
     }
-
-    // if there is more than 1 argument
     if (arguments.length > 1) {
       command = arguments.sublist(1).join(' ');
     }
-
     Cache cache = Cache(command, "");
     String? cachedResponse = cache.search();
     if (cachedResponse != null) {
