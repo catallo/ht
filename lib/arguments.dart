@@ -103,9 +103,7 @@ bool parseArguments(List arguments) {
 
     // if arguments < 2
     if (arguments.length < 2) {
-      // read last response from $home/.config/ht/last_response
-      var lastResponse =
-          File('$home/.config/ht/last_response').readAsStringSync();
+      var lastResponse = File('${htPath}last_response').readAsStringSync();
       // remove all empty lines from last response, also trim
       command = lastResponse
           .split('\n')
