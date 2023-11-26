@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ht/globals.dart';
 
 // configuration settings at ~/.config/ht/config.
 // one setting per line:
@@ -13,7 +14,7 @@ class Config {
   String? home = Platform.environment['HOME'];
 
   String _getConfigFilePath() {
-    return '$home/.config/ht/config';
+    return '${htPath}config';
   }
 
   // Check if config dir and file exist and create if not

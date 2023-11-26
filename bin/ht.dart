@@ -45,7 +45,7 @@ void setupApiKey() {
   terPrint(
       "The good news is that due to ht's low token usage, a typical request costs about \$0.00025, making it a budget-friendly tool for daily usage. You can obtain an API key by signing up at https://platform.openai.com/signup. For a more detailed guide on how to get an OpenAI API key, you can refer to this article: https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/.");
   stdout.write(
-      "\n${acBold}Enter your API key (or press enter to exit):$acReset ");
+      "\n${acBold}Paste your OpenAI API key here(or press enter to exit):$acReset ");
   apiKey = stdin.readLineSync();
   if (apiKey!.isEmpty) {
     print("Exiting...");
@@ -80,7 +80,7 @@ void main(List<String> arguments) async {
       print("\n $cachedResponse\n");
       // save to last_response
       try {
-        File lastResponse = File("$home/.config/ht/last_response");
+        File lastResponse = File("${htPath}last_response");
         await lastResponse.writeAsString(cachedResponse);
       } catch (error) {
         print("Error saving file: $error");

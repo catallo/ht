@@ -16,10 +16,10 @@ class Cache {
     }
 
     // check if database exists. if not, create it.
-    if (!File('$home/.config/ht/cache').existsSync()) {
+    if (!File('${htPath}cache').existsSync()) {
       try {
         //print("creating database");
-        File('$home/.config/ht/cache').create(recursive: true);
+        File('${htPath}cache').create(recursive: true);
       } catch (e) {
         print("Error creating cache file: $e");
         return false;
@@ -31,19 +31,18 @@ class Cache {
 
     // append  to file
     var json = jsonEncode({'prompt': prompt, 'response': response});
-    File('$home/.config/ht/cache')
-        .writeAsStringSync('$json\n', mode: FileMode.append);
+    File('${htPath}cache').writeAsStringSync('$json\n', mode: FileMode.append);
     return true;
   }
 
   // search in database
   String? search() {
-    if (!File('$home/.config/ht/cache').existsSync()) {
+    if (!File('${htPath}cache').existsSync()) {
       //print("database does not exist");
       return null;
     }
     // read file
-    var file = File('$home/.config/ht/cache').readAsStringSync();
+    var file = File('${htPath}cache').readAsStringSync();
     var lines = file.split('\n');
     for (var line in lines) {
       if (line.isEmpty) {

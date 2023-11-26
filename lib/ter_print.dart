@@ -100,8 +100,15 @@ void terPrintCorrectedVersion(line) {
 // ─────────────────────────────────────────────────────────────────────────────
 void terPrintCommandAndDescription(String line) {
   //print(line);
+
+  line = line.replaceAll("#CMD:", "");
+  line = line.replaceAll("#SB1:", "");
+  line = line.replaceAll("#SB2:", " └─");
+  line = line.replaceAll("#SB3:", "    └─");
+  line = line.replaceAll("#OPR:", "");
+
   var parts = line.split("#DSCR:");
-  var command = parts[0].trim();
+  var command = parts[0];
 
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
   //print(
@@ -114,20 +121,20 @@ void terPrintCommandAndDescription(String line) {
   // if command is longer than 27 chars, write description to additional line
   if (command.length > fixedCommandWidth) {
     var parts = line.split("#DSCR:");
-    lines.insert(0, parts[0].trim());
+    lines.insert(0, parts[0].trimRight());
     // insert parts[1] as new line in Lines
     lines.insert(1, "#DSCR:${parts[1].trim()}");
   } else {
-    lines.insert(0, line.trim());
+    lines.insert(0, line.trimRight());
   }
 
-  for (var i = 0; i < lines.length; i++) {
+/*   for (var i = 0; i < lines.length; i++) {
     lines[i] = lines[i].replaceAll("#CMD:", acBrightWhite);
     lines[i] = lines[i].replaceAll("#SB1:", acBrightWhite);
     lines[i] = lines[i].replaceAll("#SB2:", " └─$acBrightWhite");
     lines[i] = lines[i].replaceAll("#SB3:", "    └─$acBrightWhite");
     lines[i] = lines[i].replaceAll("#OPR:", acBrightWhite);
-  }
+  } */
 
   // iterate through lines to add dots padding
   for (var i = 0; i < lines.length; i++) {
@@ -135,12 +142,14 @@ void terPrintCommandAndDescription(String line) {
     if (!lines[i].contains("#DSCR:")) {
       //continue;
     }
+
     // if line starts with #DSCR:
     if (lines[i].startsWith("#DSCR:")) {
-      lines[i] =
-          lines[i].replaceAll("#DSCR:", "$acReset                        ");
+      lines[i] = lines[i]
+          .replaceAll("#DSCR:", "$acReset                             ");
       continue;
     }
+
     // if line contains #DSCR:
     if (lines[i].contains("#DSCR:")) {
       // fill space between command and #DSCR: with dots, depending on command length
@@ -156,12 +165,12 @@ void terPrintCommandAndDescription(String line) {
   // ensure line fits into terminal width
   for (var i = 0; i < lines.length; i++) {
     // if line is longer than terminal width, -11 for ansi codes
-    if ((lines[i].length - 11) > terminalWidth) {
+    if ((lines[i].length - 9) > terminalWidth) {
       int lastSpace = 0;
       lastSpace = lines[i].substring(0, terminalWidth).lastIndexOf(" ");
       var line1 = lines[i].substring(0, lastSpace);
       var line2 = lines[i].substring(lastSpace + 1);
-      line2 = "                        $line2";
+      line2 = "                             $line2";
       lines[i] = line1;
       lines.insert(i + 1, line2);
     }
@@ -169,8 +178,13 @@ void terPrintCommandAndDescription(String line) {
 
   // replace tags
   for (var i = 0; i < lines.length; i++) {
-    lines[i] = lines[i].replaceAll("└─", "$acGrey└─$acReset");
-    lines[i] = lines[i].replaceAll("#DSCR:", "$acReset ${" " * 19}");
+    // if lines does not start with 3 whitespaces
+    if (!lines[i].startsWith("                             ")) {
+      lines[i] = acBold + lines[i];
+    }
+
+    lines[i] = lines[i].replaceAll("└─", "$acGrey└─$acReset$acBold");
+    lines[i] = lines[i].replaceAll("#DSCR:", "$acReset ${" " * 19}$acBold");
     lines[i] = lines[i].trimRight();
   }
 
@@ -182,7 +196,7 @@ void terPrintCommandAndDescription(String line) {
   return;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+//summary  ─────────────────────────────────────────────────────────────────────
 void terPrintSummary(line) {
   //print("terPrintSummary: $line");
 
@@ -192,8 +206,7 @@ void terPrintSummary(line) {
   line = line.replaceAll("#ERR:", "");
   line = line.replaceAll("#WRN:", "");
   line = line.replaceAll("\n", "");
-  // summary ─────────────────────────────────────────────────────────────
-  // remove #SS from line
+
   line = line.replaceAll("#SS:", "");
   line = line.trim();
 

@@ -24,13 +24,13 @@ void gatherSystemInfo() {
   //print("shell: $shell");
 }
 
-// Following function uses a list to identify the distribution by checking if any of these
-// names appear as a substring in the output of the 'uname' command. This approach is
-// necessary because surprisingly there is no standardized way across all Linux distributions
-// to reliably and directly obtain the distribution name. The 'uname' command's output
-// varies significantly among distributions, and often the distribution name is part
-// of a longer string, hence the substring checking. If you know a better way, please
-// let me know.
+// Following function uses a list to identify the distribution by checking if any
+// of these names appear as a substring in the output of the 'uname' command. This
+// approach seems to be necessary because surprisingly there is no standardized
+// way across all Linux distributions to reliably and directly obtain the distribution
+// name. The 'uname' command's outputvaries significantly among distributions, and
+// often the distribution name is part of a longer string, hence the substring checking.
+// If you know a better way, please let me know.
 
 String? checkDistro(String uname) {
   final Set<String> distros = {

@@ -64,7 +64,7 @@ void requestGPTinstruct(String prompt) {
         // if last_response wasn't a command
         if (!completeResponse.contains("😞")) {
           // write to last_response
-          File file = File("$home/.config/ht/last_response");
+          File file = File("${htPath}last_response");
           file.writeAsString(completeResponse);
           Cache(prompt, completeResponse).save();
         } else {

@@ -3,8 +3,8 @@ import 'package:ht/config.dart';
 
 bool debug = false;
 
-const version = "2.0.0"; // SemVer
-const compileDate = "2023-11-22";
+const version = "2.0.2"; // SemVer
+const compileDate = "2023-11-26";
 
 String os = "Linux";
 String distro = "Debian derivate";
@@ -21,3 +21,5 @@ String line = "";
 var config = Config();
 
 String home = Platform.environment['HOME'] ?? "";
+
+String htPath = "$home/.config/ht/";
