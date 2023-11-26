@@ -3,7 +3,9 @@
 
 
 
-![Demo](/docs/demo.gif)
+<video controls autoplay muted>
+  <source src="docs/demo2.mp4" type="video/mp4">
+</video>
 
 ##### Usage
 
