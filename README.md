@@ -5,14 +5,13 @@
 https://github.com/catallo/ht/assets/45834058/5855363c-a0a3-4eff-8b59-dcf853b161b9
 
 
-
 ##### Usage
 
-- **ht &lt;question>** - answers question
+- **ht &lt;instruction>** - answers with shell command
 
-- **ht explain|x** - explains last answer
+- **ht e|explain** - explains last answer
 
-- **ht explain|x &nbsp;[command]** - explains command
+- **ht e|explain|x &nbsp;[command]** - explains command
 
 ##### Examples
 
