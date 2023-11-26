@@ -2,11 +2,6 @@
 ### ht - a shell command that answers your questions about shell commands.
 
 
-
-<video controls autoplay muted>
-  <source src="docs/demo2.mp4" type="video/mp4">
-</video>
-
 ##### Usage
 
 - **ht &lt;question>** - answers question
