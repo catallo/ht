@@ -91,8 +91,7 @@ void terPrintErrorsAndWarnings(String line) {
 void terPrintCorrectedVersion(line) {
   line = line.replaceAll("#COR:", "");
 
-  line =
-      "$acBrightGreen✓ $acReset Corrected version:$acBrightWhite$line$acReset\n";
+  line = "$acBrightGreen✓ $acReset Corrected version:$acBold$line$acReset\n";
   stdout.write(line);
   print("");
 }
@@ -129,11 +128,11 @@ void terPrintCommandAndDescription(String line) {
   }
 
 /*   for (var i = 0; i < lines.length; i++) {
-    lines[i] = lines[i].replaceAll("#CMD:", acBrightWhite);
-    lines[i] = lines[i].replaceAll("#SB1:", acBrightWhite);
-    lines[i] = lines[i].replaceAll("#SB2:", " └─$acBrightWhite");
-    lines[i] = lines[i].replaceAll("#SB3:", "    └─$acBrightWhite");
-    lines[i] = lines[i].replaceAll("#OPR:", acBrightWhite);
+    lines[i] = lines[i].replaceAll("#CMD:", acBold);
+    lines[i] = lines[i].replaceAll("#SB1:", acBold);
+    lines[i] = lines[i].replaceAll("#SB2:", " └─$acBold");
+    lines[i] = lines[i].replaceAll("#SB3:", "    └─$acBold");
+    lines[i] = lines[i].replaceAll("#OPR:", acBold);
   } */
 
   // iterate through lines to add dots padding
