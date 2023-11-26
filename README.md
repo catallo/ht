@@ -11,7 +11,7 @@ https://github.com/catallo/ht/assets/45834058/5855363c-a0a3-4eff-8b59-dcf853b161
 
 - **ht e|explain** - explains last answer
 
-- **ht e|explain|x &nbsp;[command]** - explains command
+- **ht e|explain &nbsp;[command]** - explains command
 
 ##### Examples
 
@@ -30,6 +30,6 @@ To use ht, you'll need an OpenAI API key. The good news is that due to ht's low 
 
 ##### Downloads
 
-[ht-v1.0.5 for Linux 64-Bit](https://github.com/catallo/ht/files/13025284/ht-1.0.5-linux64.tar.gz)
+[ht-v2.0.2 for Linux 64-Bit](https://github.com/catallo/ht/files/13466790/ht_2-0-2_linux_amd64.tar.gz)
 
-[ht-v1.0.5 for Raspberry OS 64-Bit](https://github.com/catallo/ht/files/13025318/ht-1.0.5-raspi64.tar.gz)
+[ht-v2.0.2 for MacOS ARM64](https://github.com/catallo/ht/files/13466792/ht_2-0-2_macos_arm64.zip)
