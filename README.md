@@ -2,6 +2,10 @@
 ### ht - a shell command that answers your questions about shell commands.
 
 
+https://github.com/catallo/ht/assets/45834058/5855363c-a0a3-4eff-8b59-dcf853b161b9
+
+
+
 ##### Usage
 
 - **ht &lt;question>** - answers question
