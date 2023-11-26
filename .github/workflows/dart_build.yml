@@ -11,7 +11,7 @@ jobs:
           - runs-on: ubuntu-latest
             binary-name: ht_linux_amd64
           - runs-on: macos-latest
-            binary-name: ht_macos_amd64
+            binary-name: ht_macos_arm64
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
