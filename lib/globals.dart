@@ -3,8 +3,8 @@ import 'package:ht/config.dart';
 
 bool debug = false;
 
-const version = "2.0.2"; // SemVer
-const compileDate = "2023-11-26";
+const version = "2.0.3"; // SemVer
+const compileDate = "2023-11-27";
 
 String os = "Linux";
 String distro = "Debian derivate";
