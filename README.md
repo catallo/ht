@@ -32,6 +32,7 @@ To use ht, you'll need an OpenAI API key. The good news is that due to ht's low 
 
 ##### Downloads
 
-[ht-v2.0.2 for Linux 64-Bit](https://github.com/catallo/ht/files/13466790/ht_2-0-2_linux_amd64.tar.gz)
+- [ht-v2.0.3 for Linux 64-Bit](https://github.com/catallo/ht/files/13476314/ht_2-0-3_linux64.zip)
 
-[ht-v2.0.2 for MacOS ARM64](https://github.com/catallo/ht/files/13466792/ht_2-0-2_macos_arm64.zip)
+
+- [ht-v2.0.3 for MacOS ARM64](https://github.com/catallo/ht/files/13476316/ht_2-0-3_MacOS_ARM64.zip)
