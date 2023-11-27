@@ -9,18 +9,37 @@ jobs:
       matrix:
         include:
           - runs-on: ubuntu-latest
-            binary-name: ht_linux_amd64
+            archive-suffix: linux64
           - runs-on: macos-latest
-            binary-name: ht_macos_arm64
+            archive-suffix: MacOS_ARM64
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
       - run: dart pub get
+
+      # Extract version
+      - name: Extract version
+        id: get_version
+        run: |
+          VERSION=$(grep -oP 'const String version = \K\"[^\"]+' lib/globals.dart)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "::set-output name=version::$VERSION"
+          VERSION_FORMATTED=$(echo $VERSION | sed 's/\./-/g')
+          echo "VERSION_FORMATTED=$VERSION_FORMATTED" >> $GITHUB_ENV
+
       - run: mkdir out
-      - run: dart compile exe bin/ht.dart -o out/${{ matrix.binary-name }}
-      - run: chmod u+x out/${{ matrix.binary-name }}
+      - run: dart compile exe bin/ht.dart -o out/ht
+
+      # Set executable bit
+      - run: chmod +x out/ht
+
+      # Zip the executable to preserve file permissions
+      - run: |
+          cd out
+          zip -j ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}.zip ht
+
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.binary-name }}
-          path: out/${{ matrix.binary-name }}
+          name: ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}.zip
+          path: out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}.zip
