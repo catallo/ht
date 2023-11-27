@@ -13,22 +13,17 @@ class Config {
   bool? debug;
   String? home = Platform.environment['HOME'];
 
-  String _getConfigFilePath() {
-    return '${htPath}config';
-  }
-
   // Check if config dir and file exist and create if not
   bool checkConfig() {
-    final configDirPath = '$_getConfigFilePath()';
-    if (!Directory(configDirPath).existsSync()) {
+    if (!Directory(htPath).existsSync()) {
       try {
-        Directory(configDirPath).createSync(recursive: false);
+        Directory(htPath).createSync(recursive: false);
       } catch (e) {
         print("Error creating directory: $e");
         return false;
       }
     }
-    final configFile = File(_getConfigFilePath());
+    final configFile = File("${htPath}config");
     if (!configFile.existsSync()) {
       try {
         configFile.createSync(recursive: true);
@@ -43,7 +38,7 @@ class Config {
 
   // Read property from config file
   String? _readProperty(String propertyName) {
-    final configFile = File(_getConfigFilePath());
+    final configFile = File("${htPath}config");
     final fileContents = configFile.readAsStringSync();
     final lines = fileContents.split('\n');
 
@@ -58,7 +53,7 @@ class Config {
 
 // Set property in config file
   bool _setProperty(String propertyName, String propertyValue) {
-    final configFile = File(_getConfigFilePath());
+    final configFile = File("${htPath}config");
     final regex = RegExp('$propertyName:.*');
 
     String fileContents =
