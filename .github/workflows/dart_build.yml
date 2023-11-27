@@ -22,19 +22,19 @@ jobs:
       - name: Extract version
         id: get_version
         run: |
-         VERSION=$(grep -oP 'const version = "\K[^"]+' lib/globals.dart)
+         VERSION=$(awk -F '"' '/const version =/ {print $2}' lib/globals.dart)
          echo "VERSION=$VERSION" >> $GITHUB_ENV
          echo "::set-output name=version::$VERSION"
          VERSION_FORMATTED=$(echo $VERSION | sed 's/\./-/g')
          echo "VERSION_FORMATTED=$VERSION_FORMATTED" >> $GITHUB_ENV
 
-      - run: mkdir out
-      - run: dart compile exe bin/ht.dart -o out/ht
-
       # Debug: Print extracted version
       - name: Print version
         run: echo "Extracted version is $VERSION"
 
+      - run: mkdir out
+      - run: dart compile exe bin/ht.dart -o out/ht
+ 
       # Set executable bit
       - run: chmod +x out/ht
 
