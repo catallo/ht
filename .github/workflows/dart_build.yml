@@ -19,6 +19,7 @@ jobs:
       - run: dart pub get
       - run: mkdir out
       - run: dart compile exe bin/ht.dart -o out/${{ matrix.binary-name }}
+      - run: chmod +x out/${{ matrix.binary-name }}
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.binary-name }}
