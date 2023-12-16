@@ -32,6 +32,7 @@ import 'package:ht/request_gpt_instruct.dart';
 import 'package:ht/arguments.dart';
 import 'package:ht/system_information.dart';
 import 'package:ht/ter_print.dart';
+import 'package:ht/debug.dart';
 
 void setupApiKey() {
   terPrint("\n\nTo use this application, you need to set an OpenAI API key.");
@@ -52,11 +53,12 @@ void setupApiKey() {
 
 void initialize() {
   config.checkConfig();
-  debug = config.readDebug() ?? false;
+  //debug = config.readDebug() ?? false;
   apiKey = config.readApiKey();
 }
 
 void main(List<String> arguments) async {
+  dbg("ht started");
   initialize();
 
   if (apiKey == null) {
@@ -68,12 +70,15 @@ void main(List<String> arguments) async {
   if (parseArguments(arguments)) {
     String instruction = arguments.join(' ');
     // search if exists in cache
+    dbg("searching in cache");
     Cache cache = Cache(instruction, "");
     String? cachedResponse = cache.search();
     if (cachedResponse != null) {
+      dbg("found in cache");
       print("\n $cachedResponse\n");
       // save to last_response
       try {
+        dbg("saving to last_response");
         File lastResponse = File("${htPath}last_response");
         await lastResponse.writeAsString(cachedResponse);
       } catch (error) {

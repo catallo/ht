@@ -1,106 +1,111 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:dart_openai/dart_openai.dart';
+import 'dart:async';
 
-import 'package:ht/globals.dart';
-import 'package:ht/prompts_explain.dart';
-import 'package:ht/ansi_codes.dart';
+import 'globals.dart';
+import 'prompts_explain.dart';
+import 'ansi_codes.dart';
+import 'cache.dart';
+import 'debug.dart';
+import 'unescape_json_string.dart';
+import 'ter_print.dart';
 
-import 'package:ht/ter_print.dart';
-import 'package:ht/cache.dart';
+void requestGPTexplain(String prompt) async {
+  dbg("requestGPTexplain started");
+  print("\n $acBold$prompt$acReset\n");
 
-void requestGPTexplain(String prompt) {
   String completeResponse = "";
+  String accumulatedChunk = "";
+  String currentLine = "";
 
-  OpenAI.apiKey = apiKey ?? exit(1);
+  var httpClient = HttpClient();
+  var request = await httpClient
+      .postUrl(Uri.parse('https://api.openai.com/v1/chat/completions'));
 
-  Stream<OpenAIStreamChatCompletionModel> chatStream =
-      OpenAI.instance.chat.createStream(
-    model: model,
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExSystemRole,
-        role: OpenAIChatMessageRole.system,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExUser1,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExAssistant1,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExUser2,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExAssistant2,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExUser3,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExAssistant3,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExUser4,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExAssistant4,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExUser5,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptExAssistant5,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        //content: jsonEncode("$promptExUser$prompt"),
-        content: promptExUser + prompt,
-        role: OpenAIChatMessageRole.user,
-      )
+  request.headers.set('Content-Type', 'application/json');
+  request.headers.set('Authorization', 'Bearer $apiKey');
+
+  var requestBody = jsonEncode({
+    'model': model,
+    'messages': [
+      {'role': 'system', 'content': promptExSystemRole},
+      {'role': 'user', 'content': promptExUser1},
+      {'role': 'assistant', 'content': promptExAssistant1},
+      {'role': 'user', 'content': promptExUser2},
+      {'role': 'assistant', 'content': promptExAssistant2},
+      {'role': 'user', 'content': promptExUser3},
+      {'role': 'assistant', 'content': promptExAssistant3},
+      {'role': 'user', 'content': promptExUser4},
+      {'role': 'assistant', 'content': promptExAssistant4},
+      {'role': 'user', 'content': promptExUser5},
+      {'role': 'assistant', 'content': promptExAssistant5},
+      {'role': 'user', 'content': promptExUser + prompt}
     ],
-    temperature: temp,
-  );
+    'temperature': temp,
+    'stream': true,
+  });
 
-  // print full command
-  print("\n$acBrightWhite$acBrightWhite"
-      " $prompt $acReset\n");
+  request.add(utf8.encode(requestBody));
 
-  chatStream.listen(
-      (streamChatCompletion) {
-        String? content = streamChatCompletion.choices.first.delta.content;
+  var response = await request.close();
 
-        //stdout.write(acGrey + content + acReset); // debug
+  StreamSubscription<String>? subscription;
 
-        line += content;
-        completeResponse += content;
-        // if line contains newline
-        if (line.contains("\n")) {
-          terPrint(line);
-          line = "";
+  subscription = response.transform(utf8.decoder).listen(
+    (chunk) {
+      dbg("chunk: $chunk");
+      accumulatedChunk += chunk;
+
+      if (chunk.endsWith('\n')) {
+        RegExp exp = RegExp(r'"delta":\{"content":"(.*?)"\}');
+        var matches = exp.allMatches(accumulatedChunk);
+
+        for (var match in matches) {
+          var content = match.group(1);
+          content = unescapeJsonString(content!);
+          currentLine += content;
+
+          if (currentLine.endsWith('\n')) {
+            dbg("currentLine: $currentLine");
+            terPrint(currentLine);
+            currentLine = "";
+          }
+
+          completeResponse += content;
         }
 
-        //sleep(Duration(milliseconds: 100));
-      },
-      onError: (error) {
-        print(error);
-      },
-      cancelOnError: false,
-      onDone: () {
-        terPrint(line);
-        // save to cache
-        Cache(prompt, completeResponse).save();
-        exit(0);
-      });
-  // get "usage" "prompt_tokens" of the response
+        RegExp reasonExp = RegExp(r'"finish_reason":"(.*?)"');
+        var reasonMatches = reasonExp.allMatches(accumulatedChunk);
+        for (var reasonMatch in reasonMatches) {
+          var reason = reasonMatch.group(1);
+          if (reason == "stop") {
+            dbg("\nfinish_reason: $reason");
+            terPrint(currentLine);
+            done(prompt, completeResponse);
+            subscription?.cancel();
+            return;
+          }
+        }
 
-  //print(completeOutput);
+        accumulatedChunk = "";
+        dbg("next chunk");
+      }
+    },
+    onError: (error) {
+      print(error);
+      subscription?.cancel();
+      exit(1);
+    },
+    onDone: () {
+      done(prompt, completeResponse);
+    },
+    cancelOnError: true,
+  );
+}
+
+void done(var prompt, var completeResponse) {
+  //print("\n");
+
+  Cache(prompt, completeResponse).save();
+  exit(0);
 }

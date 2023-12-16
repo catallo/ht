@@ -73,30 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  dart_openai:
-    dependency: "direct main"
-    description:
-      name: dart_openai
-      sha256: "080883dc9d7896475798012bca56551e2274fd01cef7ca39f81fe9290dd17c31"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.1.2"
-  fetch_api:
-    dependency: transitive
-    description:
-      name: fetch_api
-      sha256: b88977a8f369344cbaa13a53752629185ecae0d56c6683f0a2060b652a0cf437
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
-  fetch_client:
-    dependency: transitive
-    description:
-      name: fetch_client
-      sha256: "83c07b07a63526a43630572c72715707ca113a8aa3459efbc7b2d366b79402af"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   file:
     dependency: transitive
     description:

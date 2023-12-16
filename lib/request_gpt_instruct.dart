@@ -1,11 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 
-import 'package:ht/globals.dart';
-import 'package:ht/prompts_instruct.dart';
-import 'package:ht/cache.dart'; // Make sure to import your Cache class
+import 'package:ht/ansi_codes.dart';
+
+import 'globals.dart';
+import 'prompts_instruct.dart';
+import 'cache.dart';
+import 'debug.dart';
+import 'unescape_json_string.dart';
 
 void requestGPTinstruct(String prompt) async {
+  dbg("requestGPTinstruct started");
+  print("");
+
   String completeResponse = "";
   String accumulatedChunk = "";
 
@@ -27,15 +35,18 @@ void requestGPTinstruct(String prompt) async {
       {'role': 'user', 'content': "$promptInstUser$prompt"}
     ],
     'temperature': temp,
-    'stream': true, // Enable streamed response
+    'stream': true,
   });
 
   request.add(utf8.encode(requestBody));
 
   var response = await request.close();
 
-  response.transform(utf8.decoder).listen(
+  StreamSubscription<String>? subscription;
+
+  subscription = response.transform(utf8.decoder).listen(
     (chunk) {
+      dbg("chunk: $chunk");
       accumulatedChunk += chunk;
 
       if (chunk.endsWith('\n')) {
@@ -45,31 +56,51 @@ void requestGPTinstruct(String prompt) async {
 
         for (var match in matches) {
           var content = match.group(1);
-          content = content!.replaceAll("\\n", "\n");
+          content = unescapeJsonString(content!);
           stdout.write(content);
           completeResponse += content;
         }
 
+        // Use RegExp to extract finish_reason
+        RegExp reasonExp = RegExp(r'"finish_reason":"(.*?)"');
+        var reasonMatches = reasonExp.allMatches(accumulatedChunk);
+        // if the finish_reason is "stop", the response is complete
+        for (var reasonMatch in reasonMatches) {
+          var reason = reasonMatch.group(1);
+          if (reason == "stop") {
+            dbg("\nfinish_reason: $reason");
+            done(prompt, completeResponse);
+            subscription?.cancel(); // Cancel the subscription
+            return;
+          }
+        }
+
         accumulatedChunk = ""; // Reset for the next chunk
+        dbg("next chunk");
       }
     },
     onError: (error) {
       print(error);
+      subscription?.cancel();
       exit(1);
     },
     onDone: () {
-      print("\n");
-
-      // Check if the last response is a command (contains "🤖")
-      if (!completeResponse.contains("🤖")) {
-        File file = File("${htPath}last_response");
-        file.writeAsString(completeResponse);
-        Cache(prompt, completeResponse).save();
-      } else {
-        Cache(prompt, completeResponse).save();
-        exit(1);
-      }
+      done(prompt, completeResponse);
     },
     cancelOnError: true,
   );
+}
+
+void done(var prompt, var completeResponse) {
+  print("\n");
+
+  // Check if the last response is a command (contains "🤖")
+  if (!completeResponse.contains("🤖")) {
+    File file = File("${htPath}last_response");
+    file.writeAsString(completeResponse);
+    Cache(prompt, completeResponse).save();
+  } else {
+    Cache(prompt, completeResponse).save();
+    exit(1);
+  }
 }
