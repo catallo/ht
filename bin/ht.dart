@@ -33,12 +33,6 @@ import 'package:ht/arguments.dart';
 import 'package:ht/system_information.dart';
 import 'package:ht/ter_print.dart';
 
-// debug output ────────────────────────────────────────────────────────────────
-void dbg(String text) {
-  if (!debug) return;
-  print("$acBlue dbg:$acReset $acYellow$text$acReset");
-}
-
 void setupApiKey() {
   terPrint("\n\nTo use this application, you need to set an OpenAI API key.");
   print("");
