@@ -1,75 +1,75 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_openai/dart_openai.dart';
-import 'package:ht/cache.dart';
-
 import 'package:ht/globals.dart';
 import 'package:ht/prompts_instruct.dart';
+import 'package:ht/cache.dart'; // Make sure to import your Cache class
 
-void requestGPTinstruct(String prompt) {
+void requestGPTinstruct(String prompt) async {
   String completeResponse = "";
+  String accumulatedChunk = "";
 
-  OpenAI.apiKey = apiKey ?? exit(1);
+  var httpClient = HttpClient();
+  var request = await httpClient
+      .postUrl(Uri.parse('https://api.openai.com/v1/chat/completions'));
 
-  Stream<OpenAIStreamChatCompletionModel> chatStream =
-      OpenAI.instance.chat.createStream(
-    model: model,
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptInstSystem,
-        role: OpenAIChatMessageRole.system,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptInstUser1,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptInstAssistant1,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptInstUser2,
-        role: OpenAIChatMessageRole.user,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: promptInstAssistant2,
-        role: OpenAIChatMessageRole.assistant,
-      ),
-      OpenAIChatCompletionChoiceMessageModel(
-        content: jsonEncode("$promptInstUser$prompt"),
-        role: OpenAIChatMessageRole.user,
-      )
+  request.headers.set('Content-Type', 'application/json');
+  request.headers.set('Authorization', 'Bearer $apiKey');
+
+  var requestBody = jsonEncode({
+    'model': model,
+    'messages': [
+      {'role': 'system', 'content': promptInstSystem},
+      {'role': 'user', 'content': promptInstUser1},
+      {'role': 'assistant', 'content': promptInstAssistant1},
+      {'role': 'user', 'content': promptInstUser2},
+      {'role': 'assistant', 'content': promptInstAssistant2},
+      {'role': 'user', 'content': "$promptInstUser$prompt"}
     ],
-    temperature: temp,
-  );
+    'temperature': temp,
+    'stream': true, // Enable streamed response
+  });
 
-  stdout.write("\n ");
+  request.add(utf8.encode(requestBody));
 
-  chatStream.listen(
-      (streamChatCompletion) {
-        String? content = streamChatCompletion.choices.first.delta.content;
+  var response = await request.close();
 
-        stdout.write(content);
-        completeResponse += content;
-      },
-      onError: (error) {
-        print(error);
-        exit(1);
-      },
-      cancelOnError: false,
-      onDone: () {
-        print("\n");
+  response.transform(utf8.decoder).listen(
+    (chunk) {
+      accumulatedChunk += chunk;
 
-        // if last_response wasn't a command
-        if (!completeResponse.contains("🤖")) {
-          // write to last_response
-          File file = File("${htPath}last_response");
-          file.writeAsString(completeResponse);
-          Cache(prompt, completeResponse).save();
-        } else {
-          Cache(prompt, completeResponse).save();
-          exit(1);
+      if (chunk.endsWith('\n')) {
+        // Use RegExp to extract content within delta object
+        RegExp exp = RegExp(r'"delta":\{"content":"(.*?)"\}');
+        var matches = exp.allMatches(accumulatedChunk);
+
+        for (var match in matches) {
+          var content = match.group(1);
+          content = content!.replaceAll("\\n", "\n");
+          stdout.write(content);
+          completeResponse += content;
         }
-      });
+
+        accumulatedChunk = ""; // Reset for the next chunk
+      }
+    },
+    onError: (error) {
+      print(error);
+      exit(1);
+    },
+    onDone: () {
+      print("\n");
+
+      // Check if the last response is a command (contains "🤖")
+      if (!completeResponse.contains("🤖")) {
+        File file = File("${htPath}last_response");
+        file.writeAsString(completeResponse);
+        Cache(prompt, completeResponse).save();
+      } else {
+        Cache(prompt, completeResponse).save();
+        exit(1);
+      }
+    },
+    cancelOnError: true,
+  );
 }

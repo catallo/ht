@@ -15,7 +15,7 @@ class Cache {
       return false;
     }
 
-    // check if database exists. if not, create it.
+    // check if database exists. if not, create it
     if (!File('${htPath}cache').existsSync()) {
       try {
         //print("creating database");
