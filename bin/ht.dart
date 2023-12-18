@@ -34,6 +34,8 @@ import 'package:ht/system_information.dart';
 import 'package:ht/ter_print.dart';
 import 'package:ht/debug.dart';
 
+import 'package:ht/installation.dart';
+
 void setupApiKey() {
   terPrint("\n\nTo use this application, you need to set an OpenAI API key.");
   print("");
@@ -58,6 +60,9 @@ void initialize() {
 }
 
 void main(List<String> arguments) async {
+  writeWrapperScript();
+  exit(0);
+
   dbg("ht started");
   initialize();
 
