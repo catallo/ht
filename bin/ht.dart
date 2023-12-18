@@ -53,7 +53,7 @@ void setupApiKey() {
 
 void initialize() {
   config.checkConfig();
-  //debug = config.readDebug() ?? false;
+  debug = config.readDebug() ?? false;
   apiKey = config.readApiKey();
 }
 
@@ -67,7 +67,7 @@ void main(List<String> arguments) async {
 
   gatherSystemInfo();
 
-  if (parseArguments(arguments)) {
+  if (await parseArguments(arguments)) {
     String instruction = arguments.join(' ');
     // search if exists in cache
     dbg("searching in cache");
