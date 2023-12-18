@@ -104,8 +104,6 @@ void requestGPTexplain(String prompt) async {
 }
 
 void done(var prompt, var completeResponse) {
-  //print("\n");
-
   Cache(prompt, completeResponse).save();
   exit(0);
 }

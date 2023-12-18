@@ -12,7 +12,7 @@ import 'unescape_json_string.dart';
 
 void requestGPTinstruct(String prompt) async {
   dbg("requestGPTinstruct started");
-  print("");
+  stdout.write("\n ");
 
   String completeResponse = "";
   String accumulatedChunk = "";
@@ -50,7 +50,7 @@ void requestGPTinstruct(String prompt) async {
       accumulatedChunk += chunk;
 
       if (chunk.endsWith('\n')) {
-        // Use RegExp to extract content within delta object
+        // extract content within delta object
         RegExp exp = RegExp(r'"delta":\{"content":"(.*?)"\}');
         var matches = exp.allMatches(accumulatedChunk);
 
@@ -61,7 +61,7 @@ void requestGPTinstruct(String prompt) async {
           completeResponse += content;
         }
 
-        // Use RegExp to extract finish_reason
+        // extract finish_reason
         RegExp reasonExp = RegExp(r'"finish_reason":"(.*?)"');
         var reasonMatches = reasonExp.allMatches(accumulatedChunk);
         // if the finish_reason is "stop", the response is complete
