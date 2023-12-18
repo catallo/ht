@@ -1,7 +1,6 @@
 import 'package:ht/ansi_codes.dart';
 import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:ht/globals.dart';
 import 'package:ht/request_gpt_explain.dart';
@@ -32,12 +31,6 @@ Future<bool> parseArguments(List arguments) async {
     print(
         "$acReset$acGrey                                                   https://github.com/catallo/ht$acReset");
     return false;
-  }
-  // execute ───────────────────────────────────────────────────────────────────
-  if (arguments.length == 1 &&
-      (arguments[0] == 'x' || arguments[0] == 'execute')) {
-    await executeCommand();
-    exit(0);
   }
 
   // debug ─────────────────────────────────────────────────────────────────────
@@ -144,51 +137,4 @@ Future<bool> parseArguments(List arguments) async {
     return false;
   }
   return true;
-}
-
-Future<void> executeCommand() async {
-  try {
-    // check if last_response exists
-    if (!File('${htPath}last_response').existsSync()) {
-      print("No last response found.");
-      return;
-    }
-  } catch (error) {
-    print("Error reading file: $error");
-    return;
-  }
-  var lastResponse = File('${htPath}last_response').readAsStringSync().trim();
-  if (lastResponse.isEmpty) {
-    print("No last response found.");
-    return;
-  }
-  print("\nExecuting: $acBold$lastResponse$acReset");
-  // Get the terminal dimensions
-  int columns = 80;
-  int lines = 24;
-  if (stdout.hasTerminal) {
-    columns = stdout.terminalColumns;
-    lines = stdout.terminalLines;
-  }
-
-  // Set the environment variables for the process
-  var environment = {'COLUMNS': columns, 'LINES': lines};
-  print("environment: $environment");
-  // Start the process
-  var process = await Process.start('bash', ["${htPath}last_response"],
-      environment: {'COLUMNS': columns.toString(), 'LINES': lines.toString()});
-  // Listen to the output stream
-  //process.stdout.transform(utf8.decoder).listen((data) {
-  //  print(data); // Print each line of output
-  //});
-  // Listen to the error stream
-  process.stderr.transform(utf8.decoder).listen((data) {
-    print('Error: $data');
-  });
-
-  // Wait for the process to complete
-  await process.exitCode;
-
-  //print("Command execution completed.");
-  exit(0);
 }
