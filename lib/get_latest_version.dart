@@ -34,13 +34,10 @@ Future<bool> checkForLatestVersion() async {
     print(e);
   }
   if (latestVersion.startsWith('v')) latestVersion = latestVersion.substring(1);
-  // use isSemVerHigher() from installation_and_update.dart
   if (isSemVerHigher(version, latestVersion)) {
     dbg('New version available');
-    // write an empty file "update_available" to ~/.config/ht
     try {
       File("${htPath}update_available").createSync(recursive: false);
-      // write the latest version to ~/.config/ht/update_available
       File("${htPath}update_available")
           .writeAsStringSync('$latestVersion\n', mode: FileMode.append);
     } catch (e) {
@@ -56,7 +53,7 @@ Future<bool> checkForLatestVersion() async {
 downloadUpdate() async {
   dbg('downloadUpdate started');
 
-  print(" 🤖 There is an updated version available. Downloading ...");
+  print("\n 🤖 There is an updated version available. Downloading ...\n");
 
   // if it doesn't exist, create ~/.config/ht/download
   if (!Directory("${htPath}download").existsSync()) {
@@ -108,21 +105,19 @@ downloadUpdate() async {
 
       dbg('downloaded to $filePath. Extracting ...');
 
-      // Proceed to unzip the file
       await unzipFile(filePath);
 
-      // Delete the downloaded zip
       file.deleteSync();
-      // get file name of extracted file, it's the only file in the directory
+
       var extractedFileName = Directory("${htPath}download").listSync()[0].path;
       dbg("extractedFileName: $extractedFileName");
-      // run the extracted file with -i to install
 
       Process.runSync(extractedFileName, ['-i']);
       dbg("Process.runSync finished");
 
       File("${htPath}update_available").deleteSync();
 
+      print("Updated to $version");
       // wrapper script will handle the rest
 
       exit(0);
