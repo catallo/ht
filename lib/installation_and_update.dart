@@ -7,14 +7,14 @@ import 'debug.dart';
 
 bool checkInstallation() {
   dbg("checkInstallation started");
-  if (!File("$htPath/ht").existsSync()) {
+  if (!File("${htPath}ht").existsSync()) {
     dbg("${htPath}ht not found");
     installOrUpdate();
     return true;
   } else {
     dbg("ht found, checking version");
     // extracting version from installed warpper script
-    var htWrapperScript = File("$htPath/ht").readAsStringSync();
+    var htWrapperScript = File("${htPath}ht").readAsStringSync();
     dbg("htWrapperScript:\n $htWrapperScript");
     var foundVersion = parseSemVer(htWrapperScript);
     dbg("this version: $version installed version: $foundVersion");
@@ -54,10 +54,10 @@ bool installOrUpdate() {
     }
   }
   // check if ~/.config/ht/ht exists
-  if (!File("$htPath/ht").existsSync()) {
-    dbg("creating $htPath/ht");
+  if (!File("${htPath}ht").existsSync()) {
+    dbg("creating ${htPath}ht");
     try {
-      File("$htPath/ht").createSync(recursive: false);
+      File("${htPath}ht").createSync(recursive: false);
     } catch (e) {
       print("Error creating file: $e");
       return false;
@@ -79,10 +79,10 @@ bool installOrUpdate() {
   dbg("path: $thisFilePath");
   // copy this file to ~/.config/ht/ht.bin
   try {
-    File(thisFilePath).copySync("$htPath/ht.bin");
+    File(thisFilePath).copySync("${htPath}ht.bin");
   } catch (e) {
-    print("Error copying file: $e");
-    return false;
+    //print("Error copying file: $e");
+    //return false;
   }
 
   print(
@@ -118,10 +118,10 @@ bool isSemVerHigher(String installedVersion, String thisVersion) {
 
 bool writeWrapperScript() {
   dbg("writeWrapperScript started");
-  var wrapperScriptFile = File("$htPath/ht");
+  var wrapperScriptFile = File("${htPath}ht");
   try {
     wrapperScriptFile.writeAsStringSync(wrapperScript);
-    Process.runSync("chmod", ["+x", "$htPath/ht"]);
+    Process.runSync("chmod", ["+x", "${htPath}ht"]);
     return true;
   } catch (e) {
     print("Problem writing wrapper script: $e");

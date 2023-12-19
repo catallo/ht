@@ -38,7 +38,8 @@ import 'package:ht/get_latest_version.dart';
 import 'package:ht/installation_and_update.dart';
 
 void setupApiKey() {
-  terPrint("\n\nTo use this application, you need to set an OpenAI API key.");
+  terPrint(
+      "\n\nWelcome to ht. To use this application, you need to set an OpenAI API key.");
   print("");
   terPrint(
       "The good news is that due to ht's low token usage, a typical request costs about \$0.00025, making it a budget-friendly tool for daily usage. You can obtain an API key by signing up at https://platform.openai.com/signup. For a more detailed guide on how to get an OpenAI API key, you can refer to this article: https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/.");
@@ -67,7 +68,7 @@ Future<bool> checkLatestRelease() async {
 }
 
 bool updateAvailable() {
-  if (File("$htPath/update_available").existsSync()) {
+  if (File("${htPath}update_available").existsSync()) {
     return true;
   }
   return false;

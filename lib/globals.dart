@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:ht/config.dart';
 
-bool debug = false;
+bool debug = true;
 
-const version = "2.0.5"; // SemVer
+const version = "2.0.4";
 const compileDate = "2023-12-19";
 
 String os = "Linux";

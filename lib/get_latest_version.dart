@@ -39,9 +39,9 @@ Future<bool> checkForLatestVersion() async {
     dbg('New version available');
     // write an empty file "update_available" to ~/.config/ht
     try {
-      File("$htPath/update_available").createSync(recursive: false);
+      File("${htPath}update_available").createSync(recursive: false);
       // write the latest version to ~/.config/ht/update_available
-      File("$htPath/update_available")
+      File("${htPath}update_available")
           .writeAsStringSync('$latestVersion\n', mode: FileMode.append);
     } catch (e) {
       print("Error creating update_available file: $e");
@@ -59,9 +59,9 @@ downloadUpdate() async {
   print(" 🤖 There is an updated version available. Downloading ...");
 
   // if it doesn't exist, create ~/.config/ht/download
-  if (!Directory("$htPath/download").existsSync()) {
+  if (!Directory("${htPath}download").existsSync()) {
     try {
-      Directory("$htPath/download").createSync(recursive: false);
+      Directory("${htPath}download").createSync(recursive: false);
     } catch (e) {
       print("Error creating directory: $e");
       return false;
@@ -91,7 +91,7 @@ downloadUpdate() async {
     var matches = regExp.allMatches(body);
     if (matches.isNotEmpty) {
       var downloadUrl = matches.first.group(1);
-      print('Download URL: $downloadUrl');
+      dbg('Download URL: $downloadUrl');
 
       // Download the file
       var client = HttpClient();
@@ -100,13 +100,13 @@ downloadUpdate() async {
 
       // Read the response and write it to a file
       String fileName = path.basename(downloadUrl);
-      String filePath = '$htPath/download/$fileName';
+      String filePath = '${htPath}download/$fileName';
       var file = File(filePath);
       var fileSink = file.openWrite();
       await response.pipe(fileSink);
       fileSink.close();
 
-      print('File downloaded to $filePath. Extracting ...');
+      dbg('downloaded to $filePath. Extracting ...');
 
       // Proceed to unzip the file
       await unzipFile(filePath);
@@ -114,16 +114,13 @@ downloadUpdate() async {
       // Delete the downloaded zip
       file.deleteSync();
       // get file name of extracted file, it's the only file in the directory
-      var extractedFileName = Directory("$htPath/download").listSync()[0].path;
+      var extractedFileName = Directory("${htPath}download").listSync()[0].path;
       dbg("extractedFileName: $extractedFileName");
       // run the extracted file with -i to install
-      var installOutput = Process.runSync(extractedFileName, ['-i']);
+
       dbg("Process.runSync finished");
-      print(installOutput.stdout);
-      // delete the extracted file
-      //File(extractedFileName).deleteSync();
-      // delete the update_available file
-      //File("$htPath/update_available").deleteSync();
+
+      // wrapper script will handle the rest
       exit(0);
     } else {
       print('No matching asset found for platform $platformKey');
@@ -136,13 +133,13 @@ downloadUpdate() async {
 }
 
 Future<void> unzipFile(String filePath) async {
-  var destinationPath = "$htPath/download";
+  var destinationPath = "${htPath}download";
   var result =
       await Process.run('unzip', ['-o', filePath, '-d', destinationPath]);
 
   if (result.exitCode != 0) {
     print('Error unzipping file: ${result.stderr}');
   } else {
-    print('File unzipped to $destinationPath');
+    dbg('File unzipped to $destinationPath');
   }
 }
