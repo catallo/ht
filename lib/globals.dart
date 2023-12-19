@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:ht/config.dart';
 
-bool debug = true;
+bool debug = false;
 
-const version = "2.0.15"; // SemVer
-const compileDate = "2023-11-27";
+const version = "2.0.5"; // SemVer
+const compileDate = "2023-12-19";
 
 String os = "Linux";
 String distro = "Debian derivate";

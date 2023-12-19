@@ -24,6 +24,7 @@
 // THE SOFTWARE.
 
 import 'dart:io';
+import 'package:compute/compute.dart';
 
 import 'package:ht/cache.dart';
 import 'package:ht/ansi_codes.dart';
@@ -59,10 +60,21 @@ void initialize() {
   apiKey = config.readApiKey();
 }
 
+Future<bool> checkLatestRelease() async {
+  // Wrap the call in another function that takes a dummy argument
+  bool result = await compute(wrapperLatestVersionCheck, null);
+  return result;
+}
+
+bool updateAvailable() {
+  if (File("$htPath/update_available").existsSync()) {
+    return true;
+  }
+  return false;
+}
+
 void main(List<String> arguments) async {
   dbg("ht started");
-
-  checkForLatestVersion();
 
   // install ───────────────────────────────────────────────────────────────────
   if (arguments.isNotEmpty &&
@@ -70,6 +82,10 @@ void main(List<String> arguments) async {
     checkInstallation();
     exit(0);
   }
+
+  if (updateAvailable()) await downloadUpdate();
+
+  checkLatestRelease();
 
   initialize();
 
