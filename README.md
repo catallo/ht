@@ -15,12 +15,15 @@ https://github.com/catallo/ht/assets/45834058/cbe8913f-49fc-4e89-91e1-a25a5cabe6
 
 - **ht e|explain &nbsp;[command]** - explains command
 
+- **ht x|execute** - executes last answer
+
 ##### Examples
 
 - `ht find all IPv4 addresses in file A and write to file B`
 - `ht explain`
 - `ht explain ls -lS`
 - `ht explain "ps -aux | grep nvidia"`
+- `ht execute`
 
 ##### About
 
