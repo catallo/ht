@@ -32,21 +32,20 @@ jobs:
       - name: Print version
         run: echo "Extracted version is $VERSION"
 
-      - run: mkdir out
-      - run: dart compile exe bin/ht.dart -o out/ht
- 
+      # Compile executable with version and architecture in filename
+      - run: |
+          mkdir -p out
+          dart compile exe bin/ht.dart -o out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
+
       # Set executable bit
-      - run: chmod +x out/ht
+      - run: chmod +x out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
 
       # Zip the executable to preserve file permissions
       - run: |
           cd out
-          zip -j ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}.zip ht
+          zip -j ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}.zip ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
 
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "::set-output name=version::$VERSION"
-
-
+      # Upload the artifact
       - uses: actions/upload-artifact@v2
         with:
           name: ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}.zip
