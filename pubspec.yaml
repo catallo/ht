@@ -1,7 +1,7 @@
 name: ht
 description: a shell command that answers your questions about shell commands.
 version: 1.0.0
-# homepage: https://github.com/catallo/ht/
+homepage: https://github.com/catallo/ht/
 environment:
   sdk: '>=2.18.3 <3.0.0'
 
