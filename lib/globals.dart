@@ -3,7 +3,7 @@ import 'package:ht/config.dart';
 
 bool debug = true;
 
-const version = "2.0.4";
+const version = "2.0.5";
 const compileDate = "2023-12-19";
 
 String os = "Linux";
