@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:ht/config.dart';
 
-bool debug = false;
+bool debug = true;
 
-const version = "2.3.1";
+const version = "2.3.2";
 const compileDate = "2023-12-19";
 
 String os = "Linux";

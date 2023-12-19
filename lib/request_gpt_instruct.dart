@@ -99,6 +99,7 @@ void done(var prompt, var completeResponse) {
   if (!completeResponse.contains("🤖")) {
     File file = File("${htPath}last_response");
     file.writeAsString(completeResponse);
+    Process.runSync('chmod', ['+x', "${htPath}last_response"]);
     Cache(prompt, completeResponse).save();
   } else {
     Cache(prompt, completeResponse).save();

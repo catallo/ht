@@ -36,6 +36,7 @@ import 'package:ht/ter_print.dart';
 import 'package:ht/debug.dart';
 import 'package:ht/get_latest_version.dart';
 import 'package:ht/installation_and_update.dart';
+import 'package:ht/wrapper_script.dart';
 
 void setupApiKey() {
   terPrint(
@@ -76,6 +77,8 @@ bool updateAvailable() {
 
 void main(List<String> arguments) async {
   dbg("ht started");
+
+  dbg(wrapperScript);
 
   // install ───────────────────────────────────────────────────────────────────
   if (arguments.isNotEmpty &&
