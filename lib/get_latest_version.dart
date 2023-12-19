@@ -118,9 +118,13 @@ downloadUpdate() async {
       dbg("extractedFileName: $extractedFileName");
       // run the extracted file with -i to install
 
+      Process.runSync(extractedFileName, ['-i']);
       dbg("Process.runSync finished");
 
+      File("${htPath}update_available").deleteSync();
+
       // wrapper script will handle the rest
+
       exit(0);
     } else {
       print('No matching asset found for platform $platformKey');
