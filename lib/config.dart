@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:ht/globals.dart';
+import 'package:ht/installation_and_update.dart';
 
 // configuration settings at ~/.config/ht/config.
-// one setting per line:
-// API-KEY: 1234567890
+// key: value
+// API-KEY: sk-1234567890
 // debug: false
 
 class Config {
@@ -16,24 +17,11 @@ class Config {
   // Check if config dir and file exist and create if not
   bool checkConfig() {
     if (!Directory(htPath).existsSync()) {
-      try {
-        Directory(htPath).createSync(recursive: false);
-      } catch (e) {
-        print("Error creating directory: $e");
-        return false;
-      }
+      checkInstallation();
+    } else {
+      return true;
     }
-    final configFile = File("${htPath}config");
-    if (!configFile.existsSync()) {
-      try {
-        configFile.createSync(recursive: true);
-        configFile.writeAsStringSync('debug: false\n', mode: FileMode.append);
-      } catch (e) {
-        print("Error creating config file: $e");
-        return false;
-      }
-    }
-    return true;
+    return false;
   }
 
   // Read property from config file

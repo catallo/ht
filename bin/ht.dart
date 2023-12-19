@@ -33,8 +33,8 @@ import 'package:ht/arguments.dart';
 import 'package:ht/system_information.dart';
 import 'package:ht/ter_print.dart';
 import 'package:ht/debug.dart';
-
-import 'package:ht/installation.dart';
+import 'package:ht/get_latest_version.dart';
+import 'package:ht/installation_and_update.dart';
 
 void setupApiKey() {
   terPrint("\n\nTo use this application, you need to set an OpenAI API key.");
@@ -60,10 +60,17 @@ void initialize() {
 }
 
 void main(List<String> arguments) async {
-  writeWrapperScript();
-  exit(0);
-
   dbg("ht started");
+
+  checkForLatestVersion();
+
+  // install ───────────────────────────────────────────────────────────────────
+  if (arguments.isNotEmpty &&
+      (arguments[0] == '-i' || arguments[0] == '--install')) {
+    checkInstallation();
+    exit(0);
+  }
+
   initialize();
 
   if (apiKey == null) {

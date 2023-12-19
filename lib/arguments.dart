@@ -6,6 +6,7 @@ import 'package:ht/globals.dart';
 import 'package:ht/request_gpt_explain.dart';
 import 'package:ht/cache.dart';
 import 'package:ht/ter_print.dart';
+import 'installation_and_update.dart';
 import 'debug.dart';
 
 Future<bool> parseArguments(List arguments) async {

@@ -71,6 +71,7 @@ void requestGPTinstruct(String prompt) async {
             dbg("\nfinish_reason: $reason");
             done(prompt, completeResponse);
             subscription?.cancel(); // Cancel the subscription
+            dbg("subscription cancelled");
             return;
           }
         }
@@ -94,7 +95,7 @@ void requestGPTinstruct(String prompt) async {
 void done(var prompt, var completeResponse) {
   print("\n");
 
-  // Check if the last response is a command (contains "🤖")
+  // Check if the last response is a valid command
   if (!completeResponse.contains("🤖")) {
     File file = File("${htPath}last_response");
     file.writeAsString(completeResponse);

@@ -1,13 +1,15 @@
-import 'package:ht/globals.dart';
 import 'dart:io';
+
+import 'package:ht/globals.dart';
+import 'package:ht/debug.dart';
 
 void gatherSystemInfo() {
   os = Platform.operatingSystem;
-  //print("os: $os");
+  dbg("os: $os");
 
   var out = Process.runSync('uname', ['-a']);
   uname = out.stdout.toString().trim();
-  //print("uname: $uname");
+  dbg("uname: $uname");
 
   if (Platform.isMacOS) {
     distro = "Darwin";
@@ -15,20 +17,20 @@ void gatherSystemInfo() {
     distro = checkDistro(uname) ?? "Debian derivate";
   }
 
-  //print("distro: $distro");
+  dbg("distro: $distro");
 
   // works only for system default shell, not actual shell
   shell = Platform.environment['SHELL']!;
   shell = shell.substring(shell.lastIndexOf('/') + 1);
 
-  //print("shell: $shell");
+  dbg("shell: $shell");
 }
 
 // Following function uses a list to identify the distribution by checking if any
 // of these names appear as a substring in the output of the 'uname' command. This
 // approach seems to be necessary because surprisingly there is no standardized
 // way across all Linux distributions to reliably and directly obtain the distribution
-// name. The 'uname' command's outputvaries significantly among distributions, and
+// name. The 'uname' command's output varies significantly among distributions, and
 // often the distribution name is part of a longer string, hence the substring checking.
 // If you know a better way, please let me know.
 

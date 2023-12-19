@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:ht/ansi_codes.dart';
+import 'debug.dart';
 
 var terminalWidth = 80;
 
@@ -7,7 +8,7 @@ var terminalWidth = 80;
 void terPrint(String line) {
   line = line.replaceAll("\n", "");
 
-  //print("terPrint line: $line");
+  dbg("terPrint line: $line");
 
   if (line.contains("#DSCR:")) {
     terPrintCommandAndDescription(line);
@@ -39,8 +40,7 @@ List<String> fitIntoTerminalWidth(line, {int indentation = 0}) {
     if ((lines[i].length) > terminalWidth) {
       int lastSpace = 0;
       lastSpace = lines[i].substring(0, terminalWidth).lastIndexOf(" ");
-      //print(
-      //    "TerminalWidth: $terminalWidth, lastSpace: $lastSpace, lineLength: ${lines[i].length}");
+      dbg("TerminalWidth: $terminalWidth, lastSpace: $lastSpace, lineLength: ${lines[i].length}");
       var line1 = lines[i].substring(0, lastSpace);
       var line2 = lines[i].substring(lastSpace + 1);
       line2 = line2;
@@ -60,7 +60,7 @@ List<String> fitIntoTerminalWidth(line, {int indentation = 0}) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 void terPrintErrorsAndWarnings(String line) {
-  //print("$acYellow line: $line $acReset");
+  dbg("line: $line");
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
   String emoji = "";
 
@@ -97,7 +97,7 @@ void terPrintCorrectedVersion(line) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 void terPrintCommandAndDescription(String line) {
-  //print(line);
+  dbg(line);
 
   line = line.replaceAll("#CMD:", "");
   line = line.replaceAll("#SB1:", "");
@@ -109,8 +109,7 @@ void terPrintCommandAndDescription(String line) {
   var command = parts[0];
 
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
-  //print(
-  //    "terminalWidth: $terminalWidth, command: $command, commandLength: ${command.length}, description: $description");
+  dbg("terminalWidth: $terminalWidth, command: $command, commandLength: ${command.length}");
 
   int fixedCommandWidth = 27;
 
@@ -196,7 +195,7 @@ void terPrintCommandAndDescription(String line) {
 
 //summary  ─────────────────────────────────────────────────────────────────────
 void terPrintSummary(line) {
-  //print("terPrintSummary: $line");
+  dbg("terPrintSummary: $line");
 
   // replacements for some edge cases
 
@@ -214,6 +213,7 @@ void terPrintSummary(line) {
   line = line.trim();
 
   List<String> lines = fitIntoTerminalWidth(line, indentation: 1);
+
   // print lines
   for (var i = 0; i < lines.length; i++) {
     if (i == 0) lines[i] = "\n$acItalic${lines[i]}";
