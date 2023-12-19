@@ -103,6 +103,8 @@ void done(var prompt, var completeResponse) {
     Cache(prompt, completeResponse).save();
   } else {
     Cache(prompt, completeResponse).save();
+    File file = File("${htPath}last_response");
+    file.deleteSync();
     exit(1);
   }
 }
