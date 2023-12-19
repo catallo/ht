@@ -64,7 +64,7 @@ Future<bool> parseArguments(List arguments) async {
     var setting = arguments[1];
     var value = arguments[2];
 
-    switch (setting) {0
+    switch (setting) {
       case "model":
         print("Setting model to $value");
         break;
