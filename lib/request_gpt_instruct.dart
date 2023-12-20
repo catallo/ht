@@ -72,6 +72,9 @@ void requestGPTinstruct(String prompt) async {
             done(prompt, completeResponse);
             subscription?.cancel(); // Cancel the subscription
             dbg("subscription cancelled");
+            // stop http request
+            httpClient.close();
+            dbg("httpClient closed");
             return;
           }
         }
@@ -100,7 +103,9 @@ void done(var prompt, var completeResponse) {
     File file = File("${htPath}last_response");
     file.writeAsString(completeResponse);
     Process.runSync('chmod', ['+x', "${htPath}last_response"]);
+    dbg("chmod +x ${htPath}last_response");
     Cache(prompt, completeResponse).save();
+    exit(0);
   } else {
     Cache(prompt, completeResponse).save();
     File file = File("${htPath}last_response");
