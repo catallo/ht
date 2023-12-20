@@ -29,7 +29,7 @@ import 'package:compute/compute.dart';
 import 'package:ht/cache.dart';
 import 'package:ht/ansi_codes.dart';
 import 'package:ht/globals.dart';
-import 'package:ht/request_gpt_instruct.dart';
+import 'package:ht/request_openai_instruct.dart';
 import 'package:ht/arguments.dart';
 import 'package:ht/system_information.dart';
 import 'package:ht/ter_print.dart';
@@ -37,6 +37,8 @@ import 'package:ht/debug.dart';
 import 'package:ht/get_latest_version.dart';
 import 'package:ht/installation_and_update.dart';
 import 'package:ht/wrapper_script.dart';
+
+import 'package:ht/request_ollama_instruct.dart';
 
 void setupApiKey() {
   terPrint(
@@ -118,6 +120,7 @@ void main(List<String> arguments) async {
       }
       exit(0);
     }
-    requestGPTinstruct(instruction);
+    //requestGPTinstruct(instruction);
+    requestOllamaChat(instruction);
   }
 }

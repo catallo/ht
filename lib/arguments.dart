@@ -3,11 +3,13 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:ht/globals.dart';
-import 'package:ht/request_gpt_explain.dart';
+import 'package:ht/request_openai_explain.dart';
 import 'package:ht/cache.dart';
 import 'package:ht/ter_print.dart';
 import 'installation_and_update.dart';
 import 'debug.dart';
+
+import 'package:ht/request_ollama_explain.dart';
 
 Future<bool> parseArguments(List arguments) async {
   // help ──────────────────────────────────────────────────────────────────────
@@ -135,7 +137,8 @@ Future<bool> parseArguments(List arguments) async {
       }
       exit(0);
     }
-    requestGPTexplain(command);
+    //requestGPTexplain(command);
+    requestOllamaExplain(command);
     return false;
   }
   return true;
