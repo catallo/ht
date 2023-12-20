@@ -14,9 +14,9 @@ Your output will be parsed to a hierachical structure, this is what #SB1:, #SB2:
 Describe parts in the same order as in the original command.
 
 If necessary these three tags shall appear before explaining the command:
-#WRN: use this for warnings when user is potentially about to harm their system
-#ERR: use this to describe every error or typo that makes the command invalid. Only show if you're sure!
-#COR: the corrected version if an error was found. Write only the command in one line without any further explanation!
+#WRN: Use this for warnings when user is potentially about to harm their system
+#ERR: Use this to describe every error or typo that makes the command invalid. Only show if you're sure!
+#COR: The corrected version if an error was found. Write only the command in one line without any further explanation!
 
 If you found an error, explain the #COR: version!
 
