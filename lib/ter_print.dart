@@ -125,14 +125,6 @@ void terPrintCommandAndDescription(String line) {
     lines.insert(0, line.trimRight());
   }
 
-/*   for (var i = 0; i < lines.length; i++) {
-    lines[i] = lines[i].replaceAll("#CMD:", acBold);
-    lines[i] = lines[i].replaceAll("#SB1:", acBold);
-    lines[i] = lines[i].replaceAll("#SB2:", " └─$acBold");
-    lines[i] = lines[i].replaceAll("#SB3:", "    └─$acBold");
-    lines[i] = lines[i].replaceAll("#OPR:", acBold);
-  } */
-
   // iterate through lines to add dots padding
   for (var i = 0; i < lines.length; i++) {
     // if line does not contain #DSCR: skip
