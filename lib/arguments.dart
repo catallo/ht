@@ -137,8 +137,8 @@ Future<bool> parseArguments(List arguments) async {
       }
       exit(0);
     }
-    //requestGPTexplain(command);
-    requestOllamaExplain(command);
+    requestGPTexplain(command);
+    //requestOllamaExplain(command);
     return false;
   }
   return true;

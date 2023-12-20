@@ -120,7 +120,7 @@ void main(List<String> arguments) async {
       }
       exit(0);
     }
-    //requestGPTinstruct(instruction);
-    requestOllamaChat(instruction);
+    requestGPTinstruct(instruction);
+    //requestOllamaChat(instruction);
   }
 }
