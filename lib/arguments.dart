@@ -20,7 +20,7 @@ Future<bool> parseArguments(List arguments) async {
     print(
         "$acBold  ht <instruction>$acReset        - answers with a shell command");
     print("$acBold  ht e|explain$acReset            - explains last answer");
-    print("$acBold  ht e|explain [command]$acReset  - explains command\n");
+    print("$acBold  ht e|explain [command]$acReset  - explains command");
     print("$acBold  ht x|execute          $acReset  - executes last command\n");
     print("$acBold  ht -h|--help$acReset            - help");
     print("$acBold  ht -s|--settings$acReset        - settings overview");
