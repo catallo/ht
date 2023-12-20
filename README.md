@@ -29,7 +29,7 @@ https://github.com/catallo/ht/assets/45834058/cbe8913f-49fc-4e89-91e1-a25a5cabe6
 
 I initially created ht as a simple experiment to test GPT3's usefulness with shell commands. However, I now find myself using it extensively in my daily tasks. So I'm sharing it with the hope that it can benefit others in the same way. It's using OpenAI's GPT3.5-Turbo model now and I plan to add more models in the future, including local models. 
 
-ht is written in Dart. As a result, it is compiled into a single, self-contained binary. This means that the ht binary operates independently without requiring any external dependencies or runtime environments.
+ht is written in Dart. As a result, it is compiled into a single, self-contained binary for Linux and MacOS. This means that the ht binary operates independently without requiring any external dependencies or runtime environments.
 
 To use ht, you'll need an OpenAI API key. The good news is that due to ht's low token usage, a typical request costs about $0.00025, making it an incredibly budget-friendly tool for daily usage. You can [sign up for an API key here](https://platform.openai.com/signup) or refer to [this article](https://www.howtogeek.com/885918/how-to-get-an-openai-api-key) for detailed instructions.
 
