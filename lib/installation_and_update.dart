@@ -136,6 +136,7 @@ bool addToPATH() {
 
   // bash
   if (File("$home/.bashrc").existsSync()) {
+    dbg("bash config found");
     // check if ~/.bashrc contains htPath
     var bashrc = File("$home/.bashrc").readAsStringSync();
     if (bashrc.contains(htPath)) {
@@ -164,6 +165,7 @@ bool addToPATH() {
   }
   // zsh
   if (File("$home/.zshrc").existsSync()) {
+    dbg("zsh config found");
     var zshrc = File("$home/.zshrc").readAsStringSync();
     if (zshrc.contains(htPath)) {
       dbg("ht is already in zsh PATH.");
