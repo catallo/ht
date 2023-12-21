@@ -27,7 +27,7 @@ https://github.com/catallo/ht/assets/45834058/cbe8913f-49fc-4e89-91e1-a25a5cabe6
 
 ##### About
 
-I initially created ht as a simple experiment to test GPT3's usefulness with shell commands. However, I now find myself using it extensively in my daily tasks. So I'm sharing it with the hope that it can benefit others in the same way. It's using OpenAI's GPT3.5-Turbo model now and I plan to add more models in the future, including local models. 
+I initially created ht as a simple experiment to test GPT3's usefulness with shell commands. However, I now find myself using it extensively in my daily tasks. So I'm sharing it with the hope that it can benefit others in the same way. It's using OpenAI's GPT3.5-Turbo model now and I plan to add more models in the future, including locally running models. 
 
 ht is written in Dart. As a result, it is compiled into a single, self-contained binary for Linux and MacOS. This means that the ht binary operates independently without requiring any external dependencies or runtime environments.
 
