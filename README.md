@@ -2,9 +2,7 @@
 ### ht - a shell command that answers your questions about shell commands.
 
 
-
-https://github.com/catallo/ht/assets/45834058/cbe8913f-49fc-4e89-91e1-a25a5cabe680
-
+https://github.com/catallo/ht/assets/45834058/ec95fa8f-038a-4a1d-a85e-130b0af1630d
 
 
 ##### Usage
