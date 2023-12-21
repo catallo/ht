@@ -68,7 +68,7 @@ void terPrintErrorsAndWarnings(String line) {
     if (line.contains("none")) return;
     emoji = "❌";
   } else if (line.contains("#WRN:")) {
-    emoji = "$acBrightYellow⚠️ $acReset";
+    emoji = "$acBrightYellow⚠️$acReset";
   }
   line = line.replaceAll("#ERR:", "");
   line = line.replaceAll("#WRN:", "");
