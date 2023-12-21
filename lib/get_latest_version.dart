@@ -14,7 +14,7 @@ Future<String> fetchLatestReleaseVersion() async {
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
-    
+
     return jsonResponse['tag_name']; // 'tag_name' usually contains the version
   } else {
     throw Exception('Failed to load latest release version');
@@ -54,7 +54,13 @@ Future<bool> checkForLatestVersion() async {
 downloadUpdate() async {
   dbg('downloadUpdate started');
 
-  print("\n 🤖 There is an updated version available. Downloading ...\n");
+  // read the version number from update_available and trim it
+  var newReleaseVersionNumber =
+      File("${htPath}update_available").readAsStringSync();
+  newReleaseVersionNumber = newReleaseVersionNumber.trim();
+
+  print(
+      "\n 🤖 There is an updated version ($newReleaseVersionNumber) available. Downloading ...\n");
 
   // if it doesn't exist, create ~/.config/ht/download
   if (!Directory("${htPath}download").existsSync()) {
@@ -118,7 +124,7 @@ downloadUpdate() async {
 
       File("${htPath}update_available").deleteSync();
 
-      print("Updated to $version");
+      print("    Updated to $newReleaseVersionNumber. Please run ht again.");
       // wrapper script will handle the rest
 
       exit(0);
