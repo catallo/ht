@@ -22,7 +22,7 @@ If you found an error, explain the #COR: version!
 
 #SS: really short summary
 
-ALWAYS stick to the instructed format!
+ALWAYS stick to the instructed format! Don't make up new tags or change the order!;
 """;
 
 String promptExUser1 = "ls -l -R";

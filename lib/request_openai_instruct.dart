@@ -10,7 +10,7 @@ import 'cache.dart';
 import 'debug.dart';
 import 'unescape_json_string.dart';
 
-void requestGPTinstruct(String prompt) async {
+void requestOpenAIinstruct(String prompt) async {
   dbg("requestGPTinstruct started");
   stdout.write("\n ");
 
@@ -101,15 +101,18 @@ void done(var prompt, var completeResponse) {
   // Check if the last response is a valid command
   if (!completeResponse.contains("🤖")) {
     File file = File("${htPath}last_response");
-    file.writeAsString(completeResponse);
+    file.writeAsStringSync(completeResponse);
     Process.runSync('chmod', ['+x', "${htPath}last_response"]);
     dbg("chmod +x ${htPath}last_response");
     Cache(prompt, completeResponse).save();
     exit(0);
   } else {
+    if (File("${htPath}last_response").existsSync()) {
+      File file = File("${htPath}last_response");
+      file.deleteSync();
+    }
+
     Cache(prompt, completeResponse).save();
-    File file = File("${htPath}last_response");
-    file.deleteSync();
     exit(1);
   }
 }

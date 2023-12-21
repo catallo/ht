@@ -34,7 +34,7 @@ Future<bool> parseArguments(List arguments) async {
     print('ht explain "ps -aux | grep nvidia"');
     print(
         "$acReset$acGrey                                                   https://github.com/catallo/ht$acReset");
-    return false;
+    exit(0);
   }
 
   // debug ─────────────────────────────────────────────────────────────────────
@@ -53,7 +53,7 @@ Future<bool> parseArguments(List arguments) async {
     print(
         "\n$acReset${acItalic}Use 'ht -set <setting> <value>' to change setting (or edit ~/.config/ht/config).");
     print("example: ht -set apikey <your-api-key>>\n");
-    return false;
+    exit(0);
   }
 
   // set setting ───────────────────────────────────────────────────────────────
@@ -101,8 +101,7 @@ Future<bool> parseArguments(List arguments) async {
     print("$acGrey  Detected Distro:$acBrightGrey $distro");
     print("$acGrey  Default Shell:$acBrightGrey   $shell");
     print("$acGrey  Model:$acBrightGrey           $model\n");
-
-    return false;
+    exit(0);
   }
   // explain last response ─────────────────────────────────────────────────────
   if ((arguments[0] == 'explain' || arguments[0] == 'e')) {
@@ -137,7 +136,7 @@ Future<bool> parseArguments(List arguments) async {
       }
       exit(0);
     }
-    requestGPTexplain(command);
+    requestOpenAIexplain(command);
     //requestOllamaExplain(command);
     return false;
   }

@@ -7,3 +7,7 @@ build/
 
 # compiled binary
 bin/ht.exe
+
+# personal journal
+
+docs/JOURNAL

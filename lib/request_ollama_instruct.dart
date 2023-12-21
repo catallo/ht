@@ -32,7 +32,13 @@ void requestOllamaChat(String prompt) async {
       {'role': 'user', 'content': promptInstUser2},
       {'role': 'assistant', 'content': promptInstAssistant2},
       {'role': 'user', 'content': "$promptInstUser$prompt"}
-    ]
+    ],
+    'stream': true,
+    'options': {
+      'temperature': temp,
+      'num_thread': 4,
+      'num_keep': 0,
+    }
   });
 
   request.add(utf8.encode(requestBody));
@@ -81,15 +87,18 @@ void done(var prompt, var completeResponse) {
   // Check if the last response is a valid command
   if (!completeResponse.contains("🤖")) {
     File file = File("${htPath}last_response");
-    file.writeAsString(completeResponse);
+    file.writeAsStringSync(completeResponse);
     Process.runSync('chmod', ['+x', "${htPath}last_response"]);
     dbg("chmod +x ${htPath}last_response");
     Cache(prompt, completeResponse).save();
     exit(0);
   } else {
+    if (File("${htPath}last_response").existsSync()) {
+      File file = File("${htPath}last_response");
+      file.deleteSync();
+    }
+
     Cache(prompt, completeResponse).save();
-    File file = File("${htPath}last_response");
-    file.deleteSync();
     exit(1);
   }
 }

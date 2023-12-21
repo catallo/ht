@@ -7,13 +7,14 @@ import 'package:http/http.dart' as http;
 import 'package:ht/installation_and_update.dart';
 import 'package:ht/debug.dart';
 
-Future<String> getLatestReleaseVersion() async {
+Future<String> fetchLatestReleaseVersion() async {
   var url =
       Uri.parse('https://api.github.com/repos/catallo/ht/releases/latest');
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
+    
     return jsonResponse['tag_name']; // 'tag_name' usually contains the version
   } else {
     throw Exception('Failed to load latest release version');
@@ -28,7 +29,7 @@ Future<bool> wrapperLatestVersionCheck(void _) async {
 Future<bool> checkForLatestVersion() async {
   var latestVersion = 'v0.0.0';
   try {
-    latestVersion = await getLatestReleaseVersion();
+    latestVersion = await fetchLatestReleaseVersion();
     dbg('Latest Release Version: $latestVersion, this version: $version');
   } catch (e) {
     print(e);

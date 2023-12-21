@@ -10,7 +10,7 @@ import 'debug.dart';
 import 'unescape_json_string.dart';
 import 'ter_print.dart';
 
-void requestGPTexplain(String prompt) async {
+void requestOpenAIexplain(String prompt) async {
   dbg("requestGPTexplain started");
   print("\n $acBold$prompt$acReset\n");
 

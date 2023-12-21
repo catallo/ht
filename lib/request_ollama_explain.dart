@@ -39,6 +39,12 @@ void requestOllamaExplain(String prompt) async {
       {'role': 'assistant', 'content': promptExAssistant5},
       {'role': 'user', 'content': promptExUser + prompt}
     ],
+    'stream': true,
+    'options': {
+      'temperature': temp,
+      'num_thread': 4,
+      'num_keep': 0,
+    }
   });
 
   request.add(utf8.encode(requestBody));
