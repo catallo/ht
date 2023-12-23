@@ -26,7 +26,7 @@ void gatherSystemInfo() {
   dbg("shell: $shell");
 }
 
-// Following function uses a list to identify the distribution by checking if any
+// Following function uses a set to identify the distribution by checking if any
 // of these names appear as a substring in the output of the 'uname' command. This
 // approach seems to be necessary because surprisingly there is no standardized
 // way across all Linux distributions to reliably and directly obtain the distribution
