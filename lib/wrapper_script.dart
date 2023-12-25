@@ -18,7 +18,7 @@ if [ "\$1" = "x" ] || [ "\$1" = "execute" ]; then
         "\$(dirname "\$0")/last_response"
     else
         echo "
- 🤖 My previous answer wasn't a valid command. Please generate a new command.
+ 🤖 My previous answer wasn't a valid shell command. Please generate a new command.
 "
     fi
 else
