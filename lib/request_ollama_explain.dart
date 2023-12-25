@@ -24,7 +24,7 @@ void requestOllamaExplain(String prompt) async {
   request.headers.set('Content-Type', 'application/json');
 
   var requestBody = jsonEncode({
-    'model': 'codellama:instruct',
+    'model': 'starcoder',
     'messages': [
       {'role': 'system', 'content': promptExSystemRole},
       {'role': 'user', 'content': promptExUser1},

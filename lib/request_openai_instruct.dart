@@ -70,7 +70,7 @@ void requestOpenAIinstruct(String prompt) async {
           if (reason == "stop") {
             dbg("\nfinish_reason: $reason");
             done(prompt, completeResponse);
-            subscription?.cancel(); // Cancel the subscription
+            subscription?.cancel();
             dbg("subscription cancelled");
             // stop http request
             httpClient.close();
@@ -79,7 +79,7 @@ void requestOpenAIinstruct(String prompt) async {
           }
         }
 
-        accumulatedChunk = ""; // Reset for the next chunk
+        accumulatedChunk = "";
         dbg("next chunk");
       }
     },

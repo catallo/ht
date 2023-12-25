@@ -14,7 +14,6 @@ class Config {
   bool? debug;
   String? home = Platform.environment['HOME'];
 
-  // Check if config dir and file exist and create if not
   bool checkConfig() {
     if (!Directory(htPath).existsSync()) {
       checkInstallation();
@@ -69,23 +68,19 @@ class Config {
     }
   }
 
-  // Read API key
   String? readApiKey() {
     return _readProperty('API-KEY');
   }
 
-  // Set API key
   bool setApiKey(String apiKey) {
     return _setProperty('API-KEY', apiKey);
   }
 
-  // Read debug setting
   bool? readDebug() {
     final debugValue = _readProperty('debug');
     return debugValue == 'true';
   }
 
-  // Set debug setting
   bool setDebug(bool debug) {
     final debugValue = debug ? 'true' : 'false';
     return _setProperty('debug', debugValue);

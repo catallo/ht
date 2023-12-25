@@ -110,13 +110,21 @@ void main(List<String> arguments) async {
     if (cachedResponse != null) {
       dbg("found in cache");
       print("\n $cachedResponse\n");
-      // save to last_response
-      try {
-        dbg("saving to last_response");
-        File lastResponse = File("${htPath}last_response");
-        await lastResponse.writeAsString(cachedResponse);
-      } catch (error) {
-        print("Error saving file: $error");
+      // save to last_response if valid command, delete last_response if not
+      if (!cachedResponse.contains("🤖")) {
+        try {
+          dbg("saving to last_response");
+          File lastResponse = File("${htPath}last_response");
+          await lastResponse.writeAsString(cachedResponse);
+          Process.runSync('chmod', ['+x', "${htPath}last_response"]);
+        } catch (error) {
+          print("Error saving file: $error");
+        }
+      } else {
+        if (File("${htPath}last_response").existsSync()) {
+          File file = File("${htPath}last_response");
+          file.deleteSync();
+        }
       }
       exit(0);
     }
