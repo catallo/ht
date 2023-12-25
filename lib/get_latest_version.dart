@@ -124,7 +124,7 @@ downloadUpdate() async {
 
       File("${htPath}update_available").deleteSync();
 
-      print("    Updated to $newReleaseVersionNumber. Please run ht again.");
+      print("    Updated to $newReleaseVersionNumber. Please run ht again.\n");
       // wrapper script will handle the rest
 
       exit(0);
