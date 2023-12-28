@@ -8,21 +8,13 @@ ht is a shell helper tool focused on simplicity that can generate, explain and e
 
 #### Features
 
-- **Generate** - ht can generate shell commands based on your instructions. For example, you can ask ht to kill all processes running on port 80. ht will generate the shell command.
+- **Low token usage**
 
-- **Explain** - ht can explain shell commands in a nice, human-readable format.
+- **Cached responses**
 
-- **Execute** - ht can execute shell commands. Ask ht to execute the last command it generated or explained.
+- **Easy installation**
 
-- **Low token usage** - ht uses a low number of OpenAI tokens per request, saving costs.
-
-- **Cached responses** - ht caches answers to avoid unnecessary token usage.
-
-- **Easy installation** - It's a single binary that can be installed with a single command.
-
-- **Automatic updates** - ht will automatically check for updates and install them when available.
-
-- **Easy to use** - ht has a simple, intuitive UX focused on simplicity.
+- **Automatic updates**
 
 ##### Usage
 
