@@ -11,7 +11,7 @@ String distro = "Debian derivate";
 String uname = "-";
 String shell = "";
 
-final String model = "gpt-3.5-turbo";
+String model = "gpt-3.5-turbo";
 final double temp = 0.0;
 
 String? apiKey = "";

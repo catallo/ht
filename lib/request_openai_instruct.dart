@@ -17,9 +17,12 @@ void requestOpenAIinstruct(String prompt) async {
   String completeResponse = "";
   String accumulatedChunk = "";
 
+  var baseURL = "https://api.openai.com/v1/chat/completions";
+  // var baseURL = "http://localhost:4891/v1/chat/completions";
+  //model = "Mistral Instruct";
+
   var httpClient = HttpClient();
-  var request = await httpClient
-      .postUrl(Uri.parse('https://api.openai.com/v1/chat/completions'));
+  var request = await httpClient.postUrl(Uri.parse(baseURL));
 
   request.headers.set('Content-Type', 'application/json');
   request.headers.set('Authorization', 'Bearer $apiKey');

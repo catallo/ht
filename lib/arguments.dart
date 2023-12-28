@@ -107,8 +107,13 @@ Future<bool> parseArguments(List arguments) async {
   if ((arguments[0] == 'explain' || arguments[0] == 'e')) {
     var command = "";
 
-    // if arguments < 2
     if (arguments.length < 2) {
+      // check if last_response exists
+      if (!File('${htPath}last_response').existsSync()) {
+        print("\n 🤖 The last response wasn't a valid command.\n");
+        exit(1);
+      }
+
       var lastResponse = File('${htPath}last_response').readAsStringSync();
       // remove all empty lines from last response, also trim
       command = lastResponse
@@ -117,7 +122,7 @@ Future<bool> parseArguments(List arguments) async {
           .join('\n')
           .trim();
       if (lastResponse.isEmpty) {
-        print("No last response found.");
+        print("\n 🤖 The last response wasn't a valid command.\n");
         exit(1);
       }
     }

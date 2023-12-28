@@ -24,7 +24,7 @@ void requestOllamaChat(String prompt) async {
   request.headers.set('Content-Type', 'application/json');
 
   var requestBody = jsonEncode({
-    'model': 'starcoder',
+    'model': 'mistral-openorca',
     'messages': [
       {'role': 'system', 'content': promptInstSystem},
       {'role': 'user', 'content': promptInstUser1},

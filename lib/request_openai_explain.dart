@@ -18,9 +18,11 @@ void requestOpenAIexplain(String prompt) async {
   String accumulatedChunk = "";
   String currentLine = "";
 
+  var baseURL = "https://api.openai.com/v1/chat/completions";
+  //var baseURL = "http://localhost:4891/v1";
+
   var httpClient = HttpClient();
-  var request = await httpClient
-      .postUrl(Uri.parse('https://api.openai.com/v1/chat/completions'));
+  var request = await httpClient.postUrl(Uri.parse(baseURL));
 
   request.headers.set('Content-Type', 'application/json');
   request.headers.set('Authorization', 'Bearer $apiKey');
