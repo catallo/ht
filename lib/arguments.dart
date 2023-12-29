@@ -110,7 +110,7 @@ Future<bool> parseArguments(List arguments) async {
     if (arguments.length < 2) {
       // check if last_response exists
       if (!File('${htPath}last_response').existsSync()) {
-        print("\n 🤖 The last response wasn't a valid command.\n");
+        print("\n 🤖 My last response wasn't a valid shell command.\n");
         exit(1);
       }
 
@@ -122,7 +122,7 @@ Future<bool> parseArguments(List arguments) async {
           .join('\n')
           .trim();
       if (lastResponse.isEmpty) {
-        print("\n 🤖 The last response wasn't a valid command.\n");
+        print("\n 🤖 My last response wasn't a valid shell command.\n");
         exit(1);
       }
     }
