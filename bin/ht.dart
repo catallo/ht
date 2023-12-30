@@ -64,7 +64,7 @@ void initialize() {
   apiKey = config.readApiKey();
 }
 
-Future<bool> checkLatestRelease() async {
+Future<bool> checkForLatestRelease() async {
   // Wrap the call in another function that takes a dummy argument
   bool result = await compute(wrapperLatestVersionCheck, null);
   return result;
@@ -79,7 +79,6 @@ bool updateAvailable() {
 
 void main(List<String> arguments) async {
   dbg("ht started");
-
   dbg(wrapperScript);
 
   // install ───────────────────────────────────────────────────────────────────
@@ -91,7 +90,7 @@ void main(List<String> arguments) async {
 
   if (updateAvailable()) await downloadUpdate();
 
-  checkLatestRelease();
+  checkForLatestRelease();
 
   initialize();
 

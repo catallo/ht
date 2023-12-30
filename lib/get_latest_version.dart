@@ -21,7 +21,7 @@ Future<String> fetchLatestReleaseVersion() async {
   }
 }
 
-// Wrapper function that matches the expected signature for compute
+// Wrapper function
 Future<bool> wrapperLatestVersionCheck(void _) async {
   return await checkForLatestVersion();
 }
@@ -52,6 +52,7 @@ Future<bool> checkForLatestVersion() async {
 }
 
 downloadUpdate() async {
+  // ToDo: Refactor this function
   dbg('downloadUpdate started');
 
   // read the version number from update_available and trim it
@@ -62,7 +63,7 @@ downloadUpdate() async {
   print(
       "\n 🤖 There is an updated version ($newReleaseVersionNumber) available. Downloading ...\n");
 
-  // if it doesn't exist, create ~/.config/ht/download
+  // if it doesn't exist, create ~/.config/ht/download/
   if (!Directory("${htPath}download").existsSync()) {
     try {
       Directory("${htPath}download").createSync(recursive: false);
@@ -72,7 +73,6 @@ downloadUpdate() async {
     }
   }
 
-  // Identify the platform
   String platformKey =
       Platform.isLinux ? 'linux_x64' : (Platform.isMacOS ? 'MacOS_ARM64' : '');
 
@@ -125,8 +125,8 @@ downloadUpdate() async {
       File("${htPath}update_available").deleteSync();
 
       print("    Updated to $newReleaseVersionNumber. Please run ht again.\n");
-      // wrapper script will handle the rest
 
+      // wrapper script will handle the rest
       exit(0);
     } else {
       print('No matching asset found for platform $platformKey');
