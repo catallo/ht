@@ -15,9 +15,10 @@ Future<String> fetchLatestReleaseVersion() async {
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
 
-    return jsonResponse['tag_name']; // 'tag_name' usually contains the version
+    return jsonResponse['tag_name']; // contains the version
   } else {
-    throw Exception('Failed to load latest release version');
+    throw Exception(
+        'Failed to load latest release version, status code: ${response.statusCode}');
   }
 }
 
