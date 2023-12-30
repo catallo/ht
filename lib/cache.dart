@@ -15,10 +15,10 @@ class Cache {
       return false;
     }
 
-    // check if database exists. if not, create it
+    // check if cache exists. if not, create it
     if (!File('${htPath}cache').existsSync()) {
       try {
-        //print("creating database");
+        //print("creating cache");
         File('${htPath}cache').create(recursive: true);
       } catch (e) {
         print("Error creating cache file: $e");
@@ -38,7 +38,7 @@ class Cache {
   // search in database
   String? search() {
     if (!File('${htPath}cache').existsSync()) {
-      //print("database does not exist");
+      //print("cache does not exist");
       return null;
     }
     // read file
