@@ -29,6 +29,7 @@ void terPrint(String line) {
 
 // returns a list of lines that fit into terminal width ────────────────────────
 List<String> fitIntoTerminalWidth(line, {int indentation = 0}) {
+  terminalWidth = 80;
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
 
   String spaces = " " * indentation;
