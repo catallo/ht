@@ -114,7 +114,7 @@ void done(var prompt, var completeResponse) {
   print("\n");
 
   // Check if the last response is a valid command
-  if (!completeResponse.contains("🤖")) {
+  if ((!completeResponse.contains("🤖")) || (completeResponse.isEmpty)) {
     File file = File("${htPath}last_response");
     file.writeAsStringSync(completeResponse);
     Process.runSync('chmod', ['+x', "${htPath}last_response"]);

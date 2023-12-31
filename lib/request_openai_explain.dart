@@ -118,6 +118,8 @@ void requestOpenAIexplain(String prompt) async {
 }
 
 void done(var prompt, var completeResponse) {
-  Cache(prompt, completeResponse).save();
+  if (!completeResponse.isEmpty) {
+    Cache(prompt, completeResponse).save();
+  }
   exit(0);
 }
