@@ -13,7 +13,7 @@ jobs:
           - runs-on: macos-latest
             archive-suffix: MacOS_Intel_x64
           - runs-on: macos-latest-xlarge
-            archive-suffix: MacOS_M1_arm64
+            archive-suffix: MacOS_arm64
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
