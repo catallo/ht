@@ -10,8 +10,8 @@ jobs:
         include:
           - runs-on: ubuntu-latest
             archive-suffix: linux_x64
-          - runs-on: macos-latest-large
-            archive-suffix: MacOS_ARM64
+          - runs-on: macos-latest
+            archive-suffix: MacOS_Intel_x64
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
