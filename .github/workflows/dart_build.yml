@@ -10,7 +10,7 @@ jobs:
         include:
           - runs-on: ubuntu-latest
             archive-suffix: linux_x64
-          - runs-on: macos-latest
+          - runs-on: macos-latest-xlarge
             archive-suffix: MacOS_ARM64
     runs-on: ${{ matrix.runs-on }}
     steps:

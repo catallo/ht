@@ -52,10 +52,21 @@ void requestOllamaChat(String prompt) async {
       dbg("chunk: $chunk");
 
       var jsonResponse = jsonDecode(chunk);
+
       if (jsonResponse.containsKey('message')) {
         var content = jsonResponse['message']['content'];
         stdout.write(content);
         completeResponse += content;
+      }
+
+      if (jsonResponse.containsKey('error')) {
+        var content = jsonResponse['error']['content'];
+        // get message, type and code from error
+        print("\n 🤖 there was an error calling the API:\n");
+        print("type: " + jsonResponse['error']['type']);
+        print("code " + jsonResponse['error']['code']);
+        print("message: " + jsonResponse['error']['message']);
+        exit(1);
       }
 
       if (jsonResponse['done']) {

@@ -59,6 +59,18 @@ void requestOpenAIexplain(String prompt) async {
       accumulatedChunk += chunk;
 
       if (chunk.endsWith('\n')) {
+        /* var jsonResponse = jsonDecode(chunk);
+
+        if (jsonResponse.containsKey('error')) {
+          var content = jsonResponse['error']['content'];
+          // get message, type and code from error
+          print("\n 🤖 There was an error calling the API:\n");
+          print("  type: " + jsonResponse['error']['type']);
+          print("  code " + jsonResponse['error']['code']);
+          print("  message: " + jsonResponse['error']['message']);
+          exit(1);
+        } */
+
         RegExp exp = RegExp(r'"delta":\{"content":"(.*?)"\}');
         var matches = exp.allMatches(accumulatedChunk);
 
