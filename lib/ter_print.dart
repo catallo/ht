@@ -62,6 +62,7 @@ List<String> fitIntoTerminalWidth(line, {int indentation = 0}) {
 // ─────────────────────────────────────────────────────────────────────────────
 void terPrintErrorsAndWarnings(String line) {
   dbg("line: $line");
+  terminalWidth = 80;
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
   String emoji = "";
 
@@ -109,6 +110,7 @@ void terPrintCommandAndDescription(String line) {
   var parts = line.split("#DSCR:");
   var command = parts[0];
 
+  terminalWidth = 80;
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
   dbg("terminalWidth: $terminalWidth, command: $command, commandLength: ${command.length}");
 
