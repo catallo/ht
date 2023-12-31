@@ -12,10 +12,8 @@ jobs:
             archive-suffix: linux_x64
           - runs-on: macos-latest
             archive-suffix: MacOS_Intel_x64
-            arch: amd64
           - runs-on: macos-latest-xlarge
             archive-suffix: MacOS_M1_arm64
-            arch: arm64
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
@@ -36,15 +34,10 @@ jobs:
       - name: Print version
         run: echo "Extracted version is $VERSION"
 
-      # Compile executable with version, architecture, and platform in filename
+      # Compile executable
       - run: |
           mkdir -p out
-          if [ "${{ matrix.arch }}" == "arm64" ]; then
-            # Commands to compile for arm64 architecture
-            dart compile exe bin/ht.dart --target=arm64 -o out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
-          else
-            dart compile exe bin/ht.dart -o out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
-          fi
+          dart compile exe bin/ht.dart -o out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
 
       # Set executable bit
       - run: chmod +x out/ht_${{ env.VERSION_FORMATTED }}_${{ matrix.archive-suffix }}
