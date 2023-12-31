@@ -46,7 +46,7 @@ ht communicates directly with OpenAI's API, without involving a third-party serv
 
 ##### Installation
 
-⚠ Important: If you just want to use ht, don't clone this repo or download from Github actions. Instead, download the binary from the Downloads/Releases section below.
+⚠ Important: If you just want to use ht, don't clone this repo or download from Github Actions. Instead, download the binary from the Downloads/Releases section below.
 
 1. Download the archive for your platform from the Downloads section below.
 2. Unzip the archive.
