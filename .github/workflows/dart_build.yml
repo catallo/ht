@@ -1,6 +1,6 @@
 name: ht Build
 
-on: [push]
+on: [workflow_dispatch]
 
 jobs:
   compile:
