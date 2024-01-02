@@ -44,8 +44,6 @@ import 'package:ht/config.dart';
 void initialize() {
   dbg("initialize started");
 
-  //getOpenAIApiKeyFromENV();
-
   config.checkConfig();
   debug = config.readDebug() ?? false;
   openAIapiKey = config.readApiKey();
