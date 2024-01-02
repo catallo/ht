@@ -25,7 +25,7 @@ void requestOpenAIexplain(String prompt) async {
   var request = await httpClient.postUrl(Uri.parse(baseURL));
 
   request.headers.set('Content-Type', 'application/json');
-  request.headers.set('Authorization', 'Bearer $apiKey');
+  request.headers.set('Authorization', 'Bearer $openAIapiKey');
 
   var requestBody = jsonEncode({
     'model': model,
@@ -59,17 +59,25 @@ void requestOpenAIexplain(String prompt) async {
       accumulatedChunk += chunk;
 
       if (chunk.endsWith('\n')) {
-        /* var jsonResponse = jsonDecode(chunk);
+        // Check for errors in response
+        if (accumulatedChunk.contains('"error":')) {
+          final errorResponse = jsonDecode(accumulatedChunk);
+          final error = errorResponse['error'];
 
-        if (jsonResponse.containsKey('error')) {
-          var content = jsonResponse['error']['content'];
-          // get message, type and code from error
-          print("\n 🤖 There was an error calling the API:\n");
-          print("  type: " + jsonResponse['error']['type']);
-          print("  code " + jsonResponse['error']['code']);
-          print("  message: " + jsonResponse['error']['message']);
+          print("🤖 An error occurred:\n");
+          print("   Code: ${error['code']}");
+          print("   Type: ${error['type']}");
+          terPrint("\n$acItalic${error['message']}");
+
+          // if message contains "API key"
+          if (error['message'].contains("API")) {
+            print(
+                "\nUse$acBold ht -set <APIKEY>$acReset to set your API key.\n");
+          }
+
+          subscription?.cancel();
           exit(1);
-        } */
+        }
 
         RegExp exp = RegExp(r'"delta":\{"content":"(.*?)"\}');
         var matches = exp.allMatches(accumulatedChunk);

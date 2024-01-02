@@ -47,7 +47,8 @@ Future<bool> parseArguments(List arguments) async {
   if ((arguments[0] == '-s') || (arguments[0] == '--settings')) {
     print(acBold);
     //print("$acBold  model:     $model");
-    print("  ${acBold}apikey:    ..${apiKey!.substring(apiKey!.length - 6)}");
+    print(
+        "  ${acBold}apikey:    ..${openAIapiKey!.substring(openAIapiKey!.length - 6)}");
 
     print("  debug:     $debug");
     print(

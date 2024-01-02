@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:ht/config.dart';
 
-bool debug = false;
+bool debug = true;
 
-const version = "2.3.7";
-const compileDate = "2023-12-31";
+const version = "2.3.10";
+const compileDate = "2024-01-02";
 
 String os = "Linux";
 String distro = "Debian derivate";
@@ -14,7 +14,7 @@ String shell = "";
 String model = "gpt-3.5-turbo";
 final double temp = 0.0;
 
-String? apiKey = "";
+String? openAIapiKey = "notset";
 
 String line = "";
 

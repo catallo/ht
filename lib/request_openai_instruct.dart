@@ -9,6 +9,7 @@ import 'prompts_instruct.dart';
 import 'cache.dart';
 import 'debug.dart';
 import 'unescape_json_string.dart';
+import 'ter_print.dart';
 
 void requestOpenAIinstruct(String prompt) async {
   dbg("requestGPTinstruct started");
@@ -25,7 +26,7 @@ void requestOpenAIinstruct(String prompt) async {
   var request = await httpClient.postUrl(Uri.parse(baseURL));
 
   request.headers.set('Content-Type', 'application/json');
-  request.headers.set('Authorization', 'Bearer $apiKey');
+  request.headers.set('Authorization', 'Bearer $openAIapiKey');
 
   var requestBody = jsonEncode({
     'model': model,
@@ -53,17 +54,25 @@ void requestOpenAIinstruct(String prompt) async {
       accumulatedChunk += chunk;
 
       if (chunk.endsWith('\n')) {
-        /* var jsonResponse = jsonDecode(chunk);
+        // Check for errors in response
+        if (accumulatedChunk.contains('"error":')) {
+          final errorResponse = jsonDecode(accumulatedChunk);
+          final error = errorResponse['error'];
 
-        if (jsonResponse.containsKey('error')) {
-          var content = jsonResponse['error']['content'];
-          // get message, type and code from error
-          print("\n 🤖 There was an error calling the API:\n");
-          print("  type: " + jsonResponse['error']['type']);
-          print("  code " + jsonResponse['error']['code']);
-          print("  message: " + jsonResponse['error']['message']);
+          print("🤖 An error occurred:\n");
+          print("   Code: ${error['code']}");
+          print("   Type: ${error['type']}\n");
+          terPrint("$acItalic${error['message']}");
+
+          // if message contains "API key"
+          if (error['message'].contains("API")) {
+            print(
+                "\n${acReset}Use$acBold ht -set <APIKEY>$acReset to set your API key.\n");
+          }
+
+          subscription?.cancel();
           exit(1);
-        } */
+        }
 
         // extract content within delta object
         RegExp exp = RegExp(r'"delta":\{"content":"(.*?)"\}');

@@ -39,29 +39,16 @@ import 'package:ht/installation_and_update.dart';
 import 'package:ht/wrapper_script.dart';
 
 import 'package:ht/request_ollama_instruct.dart';
-
-void setupApiKey() {
-  terPrint(
-      "\n\n 🤖 Welcome to ht. To use this application, you need to set an OpenAI API key.");
-  print("");
-  terPrint(
-      "The good news is that due to ht's low token usage, a typical request costs about \$0.00025, making it a budget-friendly tool for daily usage. You can obtain an API key by signing up at https://platform.openai.com/signup. For a more detailed guide on how to get an OpenAI API key, you can refer to this article: https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/.");
-  stdout.write(
-      "\n${acBold}Paste your OpenAI API key here (or press enter to exit):$acReset ");
-  apiKey = stdin.readLineSync();
-  if (apiKey!.isEmpty) {
-    print("Exiting...");
-    exit(1);
-  }
-  config.setApiKey(apiKey!);
-  print("API key set.");
-  exit(0);
-}
+import 'package:ht/config.dart';
 
 void initialize() {
+  dbg("initialize started");
+
+  //getOpenAIApiKeyFromENV();
+
   config.checkConfig();
   debug = config.readDebug() ?? false;
-  apiKey = config.readApiKey();
+  openAIapiKey = config.readApiKey();
 }
 
 Future<bool> checkForLatestRelease() async {
@@ -79,7 +66,7 @@ bool updateAvailable() {
 
 void main(List<String> arguments) async {
   dbg("ht started");
-  dbg(wrapperScript);
+  //dbg(wrapperScript);
 
   // install ───────────────────────────────────────────────────────────────────
   if (arguments.isNotEmpty &&
@@ -94,7 +81,7 @@ void main(List<String> arguments) async {
 
   initialize();
 
-  if (apiKey == null) {
+  if (openAIapiKey == null) {
     setupApiKey();
   }
 
