@@ -42,8 +42,7 @@ bool installOrUpdate() {
       return false;
     }
   }
-  final configFile = File(
-      "${htPath}config"); // ToDo: read existing settings and add to new config file
+  final configFile = File("${htPath}config");
   if (!configFile.existsSync()) {
     try {
       configFile.createSync(recursive: true);
