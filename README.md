@@ -42,11 +42,9 @@ ht is written in Dart. As a result, it is compiled into a single, self-contained
 
 To use ht, you'll need an OpenAI API key. The good news is that due to ht's low token usage, a typical request costs about $0.00025, making it an incredibly budget-friendly tool for daily usage. You can [sign up for an API key here](https://platform.openai.com/signup) or refer to [this article](https://www.howtogeek.com/885918/how-to-get-an-openai-api-key) for detailed instructions.
 
-ht communicates directly with OpenAI's API, without involving a third-party server.
+ht communicates directly with OpenAI's API, without involving a third-party server. For automated updates to work, ht will send a request to the GitHub API to check for new releases.
 
 ##### Installation
-
-⚠ Important: If you just want to use ht, don't clone this repo or download from Github Actions. Instead, download the binary from the Downloads/Releases section below.
 
 1. Download the archive for your platform from the Downloads section below.
 2. Unzip the archive.
