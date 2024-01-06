@@ -66,7 +66,7 @@ void main(List<String> arguments) async {
   dbg("ht started");
   //dbg(wrapperScript);
 
-  // install ───────────────────────────────────────────────────────────────────
+  // install
   if (arguments.isNotEmpty &&
       (arguments[0] == '-i' || arguments[0] == '--install')) {
     checkInstallation();
