@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:ht/config.dart';
 
-bool debug = true;
+bool debug = false;
 
 const version = "2.3.11";
 const compileDate = "2024-01-06";
