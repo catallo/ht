@@ -32,6 +32,18 @@ bool checkInstallation() {
 
 bool installOrUpdate() {
   dbg("install started");
+
+  // check if ~/.config/ exists
+  if (!Directory("$home/config").existsSync()) {
+    dbg("creating $home/config");
+    try {
+      Directory("$home/config").createSync(recursive: false);
+    } catch (e) {
+      print("Error creating directory: $e");
+      return false;
+    }
+  }
+
   // check if ~/.config/ht exists
   if (!Directory(htPath).existsSync()) {
     dbg("creating $htPath");
@@ -49,16 +61,6 @@ bool installOrUpdate() {
       configFile.writeAsStringSync('debug: false\n', mode: FileMode.append);
     } catch (e) {
       print("Error creating config file: $e");
-      return false;
-    }
-  }
-  // check if ~/.config/ exists
-  if (!Directory("$home/config").existsSync()) {
-    dbg("creating $home/config");
-    try {
-      Directory("$home/config").createSync(recursive: false);
-    } catch (e) {
-      print("Error creating directory: $e");
       return false;
     }
   }
