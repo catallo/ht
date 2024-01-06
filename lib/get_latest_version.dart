@@ -74,8 +74,28 @@ downloadUpdate() async {
     }
   }
 
-  String platformKey =
-      Platform.isLinux ? 'linux_x64' : (Platform.isMacOS ? 'MacOS_ARM64' : '');
+  // determine platform for update.
+  // ToDo: add ARM linux support
+  String platformKey = "";
+
+  if (Platform.isLinux) {
+    platformKey = 'linux_x64';
+  } else {
+    // use uname -a to determine if it's an x86 or ARM Mac
+    var result = await Process.run('uname', ['-a']);
+    if (result.exitCode != 0) {
+      print('Error determining platform: ${result.stderr}');
+      exit(1);
+    }
+    var uname = result.stdout.toString();
+    dbg("uname: $uname");
+    if (uname.contains('x86_64')) {
+      platformKey = 'MacOS_Intel';
+    } else {
+      platformKey = 'MacOS_arm64';
+    }
+    dbg("platformKey: $platformKey");
+  }
 
   // Fetch the latest release data from GitHub
   var url =
