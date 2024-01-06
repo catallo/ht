@@ -72,7 +72,7 @@ void requestOllamaChat(String prompt) async {
       if (jsonResponse['done']) {
         dbg("\nresponse complete");
         done(prompt, completeResponse);
-        subscription?.cancel(); // Cancel the subscription
+        subscription?.cancel();
         dbg("subscription cancelled");
         // stop http request
         httpClient.close();

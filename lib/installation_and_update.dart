@@ -52,6 +52,17 @@ bool installOrUpdate() {
       return false;
     }
   }
+  // check if ~/.config/ exists
+  if (!Directory("$home/config").existsSync()) {
+    dbg("creating $home/config");
+    try {
+      Directory("$home/config").createSync(recursive: false);
+    } catch (e) {
+      print("Error creating directory: $e");
+      return false;
+    }
+  }
+
   // check if ~/.config/ht/ht exists
   if (!File("${htPath}ht").existsSync()) {
     dbg("creating ${htPath}ht");

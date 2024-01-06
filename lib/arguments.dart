@@ -12,7 +12,7 @@ import 'debug.dart';
 import 'package:ht/request_ollama_explain.dart';
 
 Future<bool> parseArguments(List arguments) async {
-  // help ──────────────────────────────────────────────────────────────────────
+  // help
   if (arguments.isEmpty ||
       (arguments[0] == '-h') ||
       (arguments[0] == '--help')) {
@@ -37,13 +37,13 @@ Future<bool> parseArguments(List arguments) async {
     exit(0);
   }
 
-  // debug ─────────────────────────────────────────────────────────────────────
+  // debug
   if ((arguments[0] == '-d') || (arguments[0] == '--debug')) {
     debug = true;
     arguments = arguments.sublist(1);
   }
 
-  // show settings ─────────────────────────────────────────────────────────────
+  // show settings
   if ((arguments[0] == '-s') || (arguments[0] == '--settings')) {
     print(acBold);
     //print("$acBold  model:     $model");
@@ -57,7 +57,7 @@ Future<bool> parseArguments(List arguments) async {
     exit(0);
   }
 
-  // set setting ───────────────────────────────────────────────────────────────
+  // set setting
   if (arguments[0] == '-set') {
     if (arguments.length != 3) {
       print("\n$acBold  Wrong number of arguments.\n");
@@ -94,7 +94,7 @@ Future<bool> parseArguments(List arguments) async {
     }
     return false;
   }
-  // version ───────────────────────────────────────────────────────────────────
+  // version
   if ((arguments[0] == '-v') || (arguments[0] == '--version')) {
     print(
         "\n$acItalic$acBold  ht$acReset$acItalic v$version ($compileDate)$acReset\n");
@@ -104,7 +104,7 @@ Future<bool> parseArguments(List arguments) async {
     print("$acGrey  Model:$acBrightGrey           $model\n");
     exit(0);
   }
-  // explain last response ─────────────────────────────────────────────────────
+  // explain last response
   if ((arguments[0] == 'explain' || arguments[0] == 'e')) {
     var command = "";
 

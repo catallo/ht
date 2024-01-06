@@ -4,7 +4,7 @@ import 'debug.dart';
 
 var terminalWidth = 80;
 
-// decides which function to use ───────────────────────────────────────────────
+// decides which function to use
 void terPrint(String line) {
   line = line.replaceAll("\n", "");
 
@@ -27,7 +27,7 @@ void terPrint(String line) {
   return;
 }
 
-// returns a list of lines that fit into terminal width ────────────────────────
+// returns a list of lines that fit into terminal width
 List<String> fitIntoTerminalWidth(line, {int indentation = 0}) {
   terminalWidth = 80;
   if (stdout.hasTerminal) terminalWidth = stdout.terminalColumns;
@@ -59,7 +59,7 @@ List<String> fitIntoTerminalWidth(line, {int indentation = 0}) {
   return lines;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+//
 void terPrintErrorsAndWarnings(String line) {
   dbg("line: $line");
   terminalWidth = 80;
@@ -88,7 +88,7 @@ void terPrintErrorsAndWarnings(String line) {
   return;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+//
 void terPrintCorrectedVersion(line) {
   line = line.replaceAll("#COR:", "");
 
@@ -97,7 +97,7 @@ void terPrintCorrectedVersion(line) {
   print("");
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+//
 void terPrintCommandAndDescription(String line) {
   dbg(line);
 
@@ -217,7 +217,7 @@ void terPrintSummary(line) {
   print("");
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+//
 void terPrintLine(String line, {int indentation = 0}) {
   List<String> lines = fitIntoTerminalWidth(line, indentation: indentation);
 
