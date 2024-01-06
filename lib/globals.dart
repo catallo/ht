@@ -3,8 +3,8 @@ import 'package:ht/config.dart';
 
 bool debug = true;
 
-const version = "2.3.10";
-const compileDate = "2024-01-02";
+const version = "2.3.11";
+const compileDate = "2024-01-06";
 
 String os = "Linux";
 String distro = "Debian derivate";
