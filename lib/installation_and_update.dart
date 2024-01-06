@@ -185,42 +185,31 @@ bool addToPATH() {
       ]);
       dbg("ht added to fish PATH. $output");
     }
+  }
+
+  // zsh
+  if (File("$home/.zshrc").existsSync()) {
+    dbg("zsh config found");
+    var zshrc = File("$home/.zshrc").readAsStringSync();
+    if (zshrc.contains(htPath)) {
+      dbg("ht is already in zsh PATH.");
+    } else {
+      var output = Process.runSync(
+          "zsh", ["-c", "echo 'export PATH=\$PATH:$htPath' >> ~/.zshrc"]);
+      dbg("ht added to zsh PATH. $output");
+    }
   } else {
-    dbg("creating ~/.config/fish/config.fish");
+    dbg("creating ~/.zshrc");
     try {
-      File("$home/.config/fish/config.fish").createSync(recursive: false);
-      var output = Process.runSync("fish", [
-        "-c",
-        "echo 'set -gx PATH \$PATH $htPath' >> ~/.config/fish/config.fish"
-      ]);
-      dbg("ht added to fish PATH. $output");
+      File("$home/.zshrc").createSync(recursive: false);
+      var output = Process.runSync(
+          "zsh", ["-c", "echo 'export PATH=\$PATH:$htPath' >> ~/.zshrc"]);
+      dbg("ht added to zsh PATH. $output");
     } catch (e) {
       print("Error creating file: $e");
       return false;
     }
-    // zsh
-    if (File("$home/.zshrc").existsSync()) {
-      dbg("zsh config found");
-      var zshrc = File("$home/.zshrc").readAsStringSync();
-      if (zshrc.contains(htPath)) {
-        dbg("ht is already in zsh PATH.");
-      } else {
-        var output = Process.runSync(
-            "zsh", ["-c", "echo 'export PATH=\$PATH:$htPath' >> ~/.zshrc"]);
-        dbg("ht added to zsh PATH. $output");
-      }
-    } else {
-      dbg("creating ~/.zshrc");
-      try {
-        File("$home/.zshrc").createSync(recursive: false);
-        var output = Process.runSync(
-            "zsh", ["-c", "echo 'export PATH=\$PATH:$htPath' >> ~/.zshrc"]);
-        dbg("ht added to zsh PATH. $output");
-      } catch (e) {
-        print("Error creating file: $e");
-        return false;
-      }
-    }
   }
+
   return true;
 }
