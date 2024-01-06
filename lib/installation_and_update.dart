@@ -34,10 +34,10 @@ bool installOrUpdate() {
   dbg("install started");
 
   // check if ~/.config/ exists
-  if (!Directory("$home/config").existsSync()) {
-    dbg("creating $home/config");
+  if (!Directory("$home/.config").existsSync()) {
+    dbg("creating $home/.config");
     try {
-      Directory("$home/config").createSync(recursive: false);
+      Directory("$home/.config").createSync(recursive: false);
     } catch (e) {
       print("Error creating directory: $e");
       return false;
