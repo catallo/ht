@@ -90,7 +90,7 @@ downloadUpdate() async {
     var uname = result.stdout.toString();
     dbg("uname: $uname");
     if (uname.contains('x86_64')) {
-      platformKey = 'MacOS_Intel';
+      platformKey = 'MacOS_Intel_x64';
     } else {
       platformKey = 'MacOS_arm64';
     }
