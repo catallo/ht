@@ -6,16 +6,6 @@ https://github.com/catallo/ht/assets/45834058/ec95fa8f-038a-4a1d-a85e-130b0af163
 
 ht is a shell helper tool focused on simplicity that can generate, explain and execute shell commands.
 
-#### Features
-
-- **Low token usage**
-
-- **Cached responses**
-
-- **Easy installation**
-
-- **Automatic updates**
-
 ##### Usage
 
 - **ht &lt;instruction>** - answers with shell command
@@ -33,6 +23,13 @@ ht is a shell helper tool focused on simplicity that can generate, explain and e
 - `ht explain ls -lS`
 - `ht explain "ps -aux | grep nvidia"`
 - `ht execute`
+
+#### Features
+
+- **Low token usage**
+- **Cached responses**
+- **Easy installation**
+- **Automatic updates**
 
 ##### About
 
