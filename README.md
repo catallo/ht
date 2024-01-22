@@ -28,7 +28,7 @@ ht is a shell helper tool focused on simplicity that can generate, explain and e
 
 - **Low token usage**
 - **Cached responses**
-- **Easy installation**
+- **Easy installation (no root required)**
 - **Automatic updates**
 
 ##### About
