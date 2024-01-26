@@ -4,7 +4,7 @@
 
 https://github.com/catallo/ht/assets/45834058/ec95fa8f-038a-4a1d-a85e-130b0af1630d
 
-ht is a shell helper tool focused on simplicity that can generate, explain and execute shell commands.
+ht is a shell helper tool focused on simplicity that can generate, explain and execute shell commands using AI.
 
 ##### Usage
 
